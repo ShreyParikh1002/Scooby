@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import androidx.core.app.NotificationCompat;
@@ -22,7 +23,8 @@ import androidx.core.app.NotificationCompat;
 public class FloatingService extends Service {
     private WindowManager wm;
     private LinearLayout ll;
-
+    ImageView close;
+    View viewRoot;
     public FloatingService() {
     }
 
@@ -61,12 +63,22 @@ public class FloatingService extends Service {
             startForeground(2, notification);
         }
 
-        View viewRoot = LayoutInflater.from(this).inflate(R.layout.floating_layout, null);
+        viewRoot = LayoutInflater.from(this).inflate(R.layout.floating_layout, null);
         WindowManager.LayoutParams parameters=new WindowManager.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT,LAYOUT_FLAG,WindowManager.LayoutParams.FLAG_BLUR_BEHIND, PixelFormat.TRANSLUCENT);
-
+        close = viewRoot.findViewById(R.id.window_close);
+        close.setOnClickListener(view -> stopService());
         parameters.x=0;
         parameters.y=0;
         parameters.gravity= Gravity.CENTER| Gravity.CENTER;
         wm.addView(viewRoot,parameters);
+    }
+    private void stopService() {
+        try {
+            stopForeground(true);
+            stopSelf();
+            wm.removeViewImmediate(viewRoot);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
