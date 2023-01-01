@@ -44,11 +44,14 @@
         android:background="@color/windowBody"
         android:orientation="horizontal">
 
-        <EditText  android:id="@+id/content_text"
+        <EditText  android:id="@+id/task1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
-
+        <EditText  android:id="@+id/task2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
         <ImageButton  android:id="@+id/content_button"
             android:layout_width="32dp"
             android:layout_height="32dp"

@@ -15,8 +15,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 
@@ -25,6 +27,7 @@ public class FloatingService extends Service {
     private LinearLayout ll;
     ImageView close;
     View viewRoot;
+    EditText task1,task2;
     public FloatingService() {
     }
 
@@ -38,12 +41,13 @@ public class FloatingService extends Service {
         super.onCreate();
         wm =(WindowManager ) getSystemService(WINDOW_SERVICE);
         int LAYOUT_FLAG;
+//        seeking required permissions
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             LAYOUT_FLAG = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
         } else {
             LAYOUT_FLAG = WindowManager.LayoutParams.TYPE_PHONE;
         }
-
+//        providing a constant notification while service is running
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel("com.example.floatinglayout", "Floating Layout Service", NotificationManager.IMPORTANCE_LOW);
             channel.setLightColor(Color.BLUE);
@@ -62,10 +66,11 @@ public class FloatingService extends Service {
                     .build();
             startForeground(2, notification);
         }
-
         viewRoot = LayoutInflater.from(this).inflate(R.layout.floating_layout, null);
         WindowManager.LayoutParams parameters=new WindowManager.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT,LAYOUT_FLAG,WindowManager.LayoutParams.FLAG_BLUR_BEHIND, PixelFormat.TRANSLUCENT);
         close = viewRoot.findViewById(R.id.window_close);
+        task1 =viewRoot.findViewById(R.id.task1);
+        task2 =viewRoot.findViewById(R.id.task2);
         close.setOnClickListener(view -> stopService());
         parameters.x=0;
         parameters.y=0;
@@ -73,12 +78,18 @@ public class FloatingService extends Service {
         wm.addView(viewRoot,parameters);
     }
     private void stopService() {
-        try {
-            stopForeground(true);
-            stopSelf();
-            wm.removeViewImmediate(viewRoot);
-        } catch (Exception e) {
-            e.printStackTrace();
+//        prevents closing tab until task added
+        if(!task1.getText().toString().isEmpty() && !task2.getText().toString().isEmpty()){
+            try {
+                stopForeground(true);
+                stopSelf();
+                wm.removeViewImmediate(viewRoot);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        else{
+            Toast.makeText(this, "Please enter task", Toast.LENGTH_SHORT).show();
         }
     }
 }
