@@ -31,7 +31,6 @@ public class FloatingService extends Service {
     public FloatingService() {
     }
 
-
     @Override
     public IBinder onBind(Intent intent) {
         return null;
@@ -66,6 +65,7 @@ public class FloatingService extends Service {
                     .build();
             startForeground(2, notification);
         }
+
         viewRoot = LayoutInflater.from(this).inflate(R.layout.floating_layout, null);
         WindowManager.LayoutParams parameters=new WindowManager.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT,LAYOUT_FLAG,WindowManager.LayoutParams.FLAG_BLUR_BEHIND, PixelFormat.TRANSLUCENT);
         close = viewRoot.findViewById(R.id.window_close);

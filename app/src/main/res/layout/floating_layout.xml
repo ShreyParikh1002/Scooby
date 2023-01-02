@@ -43,11 +43,12 @@
         android:layout_weight="1"
         android:background="@color/windowBody"
         android:orientation="horizontal">
-
+        <!--input task one-->
         <EditText  android:id="@+id/task1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
+        <!--input task two-->
         <EditText  android:id="@+id/task2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
