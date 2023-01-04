@@ -15,9 +15,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
@@ -26,8 +29,12 @@ public class FloatingService extends Service {
     private WindowManager wm;
     private LinearLayout ll;
     ImageView close;
+    Button emergency;
     View viewRoot;
     EditText task1,task2;
+    String[] courses = { "","Morning", "DSA",
+            "Friends", "Wasted","Food"
+             };
     public FloatingService() {
     }
 
@@ -67,15 +74,48 @@ public class FloatingService extends Service {
         }
 
         viewRoot = LayoutInflater.from(this).inflate(R.layout.floating_layout, null);
-        WindowManager.LayoutParams parameters=new WindowManager.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT,LAYOUT_FLAG,WindowManager.LayoutParams.FLAG_BLUR_BEHIND, PixelFormat.TRANSLUCENT);
+        WindowManager.LayoutParams parameters=new WindowManager.LayoutParams(900, ViewGroup.LayoutParams.WRAP_CONTENT,LAYOUT_FLAG,WindowManager.LayoutParams.FLAG_BLUR_BEHIND, PixelFormat.TRANSLUCENT);
         close = viewRoot.findViewById(R.id.window_close);
+        emergency = viewRoot.findViewById(R.id.emergency);
         task1 =viewRoot.findViewById(R.id.task1);
         task2 =viewRoot.findViewById(R.id.task2);
+
         close.setOnClickListener(view -> stopService());
+        emergency.setOnClickListener(view -> stop());
+
         parameters.x=0;
         parameters.y=0;
+//        parameters.alpha = 0.8f;
         parameters.gravity= Gravity.CENTER| Gravity.CENTER;
         wm.addView(viewRoot,parameters);
+
+        Spinner spin1 = viewRoot.findViewById(R.id.spinner1);
+        Spinner spin2 = viewRoot.findViewById(R.id.spinner2);
+        Spinner spin3 = viewRoot.findViewById(R.id.spinner3);
+        Spinner spin4 = viewRoot.findViewById(R.id.spinner4);
+//        spin.setOnItemSelectedListener(this);
+
+        // Create the instance of ArrayAdapter
+        // having the list of courses
+        ArrayAdapter ad
+                = new ArrayAdapter(
+                this,
+                android.R.layout.simple_spinner_item,
+                courses);
+
+        // set simple layout resource file
+        // for each item of spinner
+        ad.setDropDownViewResource(
+                android.R.layout
+                        .simple_spinner_dropdown_item);
+
+        // Set the ArrayAdapter (ad) data on the
+        // Spinner which binds data to spinner
+        spin1.setAdapter(ad);
+        spin2.setAdapter(ad);
+        spin3.setAdapter(ad);
+        spin4.setAdapter(ad);
+
     }
     private void stopService() {
 //        prevents closing tab until task added
@@ -89,7 +129,18 @@ public class FloatingService extends Service {
             }
         }
         else{
-            Toast.makeText(this, "Please enter task", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please enter at least 2 task", Toast.LENGTH_SHORT).show();
         }
+    }
+    private void stop() {
+//        prevents closing tab until task added
+            try {
+                stopForeground(true);
+                stopSelf();
+                wm.removeViewImmediate(viewRoot);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
     }
 }

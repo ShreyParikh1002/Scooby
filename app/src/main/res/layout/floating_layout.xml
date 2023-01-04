@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:weightSum="1">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="350dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
-    <LinearLayout android:id="@+id/window_header"
+    <LinearLayout
+        android:id="@+id/window_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/windowHeader"
-        android:orientation="horizontal"
-        android:weightSum="1">
+        android:orientation="horizontal">
 
-        <TextView android:id="@+id/window_title"
+        <TextView
+            android:id="@+id/window_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="start|center_vertical"
@@ -24,7 +25,8 @@
             android:text="add note"
             android:textColor="@color/windowHeaderText" />
 
-        <ImageButton android:id="@+id/window_close"
+        <ImageButton
+            android:id="@+id/window_close"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_gravity="end|center_vertical"
@@ -37,40 +39,163 @@
 
     </LinearLayout>
 
-    <LinearLayout android:id="@+id/window_content"
+    <LinearLayout
+        android:id="@+id/window_content1"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
         android:background="@color/windowBody"
         android:orientation="horizontal">
         <!--input task one-->
-        <EditText  android:id="@+id/task1"
+        <EditText
+            android:id="@+id/task1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3" />
+
+        <EditText
+            android:id="@+id/time1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
         <!--input task two-->
-        <EditText  android:id="@+id/task2"
+        <Spinner
+            android:id="@+id/spinner1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="2" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/window_content2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@color/windowBody"
+        android:orientation="horizontal">
+        <!--input task one-->
+        <EditText
+            android:id="@+id/task2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3" />
+
+        <EditText
+            android:id="@+id/time2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
-        <ImageButton  android:id="@+id/content_button"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_gravity="end|center_vertical"
-            android:layout_margin="4dp"
-            android:background="?android:attr/selectableItemBackground"
-            android:src="@drawable/baseline_send_black_24"
-            android:tint="@color/windowSend"
-            android:tintMode="src_in" />
-
+        <!--input task two-->
+        <Spinner
+            android:id="@+id/spinner2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="2" />
     </LinearLayout>
-
-
-    <Button
-        android:id="@+id/button"
+    <LinearLayout
+        android:id="@+id/window_content3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Emergency" />
+        android:layout_weight="1"
+        android:background="@color/windowBody"
+        android:orientation="horizontal">
+        <!--input task one-->
+        <EditText
+            android:id="@+id/task3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3" />
+
+        <EditText
+            android:id="@+id/time3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+        <!--input task two-->
+        <Spinner
+            android:id="@+id/spinner3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="2" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/window_content4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@color/windowBody"
+        android:orientation="horizontal">
+        <!--input task one-->
+        <EditText
+            android:id="@+id/task4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3" />
+
+        <EditText
+            android:id="@+id/time4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+        <!--input task two-->
+        <Spinner
+            android:id="@+id/spinner4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="2" />
+    </LinearLayout>
+    <!--        <ImageButton  android:id="@+id/content_button"-->
+    <!--            android:layout_width="32dp"-->
+    <!--            android:layout_height="32dp"-->
+    <!--            android:layout_gravity="end|center_vertical"-->
+    <!--            android:layout_margin="4dp"-->
+    <!--            android:background="?android:attr/selectableItemBackground"-->
+    <!--            android:src="@drawable/baseline_send_black_24"-->
+    <!--            android:tint="@color/windowSend"-->
+    <!--            android:tintMode="src_in" />-->
+
+    <!--    </LinearLayout>-->
+
+    <!--    <EditText  android:id="@+id/task2"-->
+    <!--        android:layout_width="0dp"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_weight="1" />-->
+    <!--    <Spinner-->
+    <!--        android:id="@+id/spinner1"-->
+    <!--        android:layout_width="0dp"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_weight="1" />-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="2"
+            android:text="Submit" />
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:text="Add" />
+        <Button
+            android:id="@+id/emergency"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="2"
+            android:text="Emergency" />
+    </LinearLayout>
 
 
 </LinearLayout>
