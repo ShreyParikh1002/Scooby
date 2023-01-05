@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "541316840166",
+    "project_id": "scooby-2c6bd",
+    "storage_bucket": "scooby-2c6bd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:541316840166:android:e5ca6e1a4ff6e464e95927",
+        "android_client_info": {
+          "package_name": "com.example.scooby"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "541316840166-7tl4qibkmkji4mvon2ghaoaiiom1g3iq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDIxcLkViC3G3jhdisaicCCjiNeV-VMXJA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "541316840166-7tl4qibkmkji4mvon2ghaoaiiom1g3iq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
