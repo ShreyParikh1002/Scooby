@@ -25,6 +25,8 @@ import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+
 public class FloatingService extends Service {
     private WindowManager wm;
     private LinearLayout ll;
@@ -32,9 +34,13 @@ public class FloatingService extends Service {
     Button emergency;
     View viewRoot;
     EditText task1,task2;
+
     String[] courses = { "","Morning", "DSA",
             "Friends", "Wasted","Food"
              };
+//    ..................................................................................
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+//    ..................................................................................
     public FloatingService() {
     }
 
