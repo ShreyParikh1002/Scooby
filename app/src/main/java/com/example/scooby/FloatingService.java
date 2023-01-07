@@ -40,6 +40,7 @@ public class FloatingService extends Service {
              };
 //    ..................................................................................
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+//    planned structure dates folder -> date -> time slots doc -> (activity ,time ,tag)
 //    ..................................................................................
     public FloatingService() {
     }
