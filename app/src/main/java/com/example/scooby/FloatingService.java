@@ -151,3 +151,10 @@ public class FloatingService extends Service {
 
     }
 }
+
+//firestore documents have limit ,cant have more than 20,000 fields
+//firestore retrieves all data from document , can't retrieve partial data fetching irrelevant data will
+//drain more battery , wastes data so better to create documents inside documents
+//but u are billed according to queries , so if for fetching some data again and again you have to make 3 queries due to hierarchy that's expensive
+//queries find documents in a single collection
+//
