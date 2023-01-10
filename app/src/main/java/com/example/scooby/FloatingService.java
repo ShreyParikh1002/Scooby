@@ -18,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -33,12 +34,14 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class FloatingService extends Service {
@@ -48,6 +51,8 @@ public class FloatingService extends Service {
     Button emergency,submit;
     View viewRoot;
     EditText task1,task2,task3,task4;
+    EditText time1,time2,time3,time4;
+    Spinner spin1,spin2,spin3,spin4;
     int cnt=0;
     String[] courses = { "","Morning", "DSA",
             "Friends", "Wasted","Food"
@@ -121,15 +126,14 @@ public class FloatingService extends Service {
         parameters.gravity= Gravity.CENTER| Gravity.CENTER;
         wm.addView(viewRoot,parameters);
 
-        Spinner spin1 = viewRoot.findViewById(R.id.spinner1);
-        Spinner spin2 = viewRoot.findViewById(R.id.spinner2);
-        Spinner spin3 = viewRoot.findViewById(R.id.spinner3);
-        Spinner spin4 = viewRoot.findViewById(R.id.spinner4);
+        spin1 = viewRoot.findViewById(R.id.spinner1);
+        spin2 = viewRoot.findViewById(R.id.spinner2);
+        spin3 = viewRoot.findViewById(R.id.spinner3);
+        spin4 = viewRoot.findViewById(R.id.spinner4);
 
         task1 = viewRoot.findViewById(R.id.task1);
         task2 = viewRoot.findViewById(R.id.task2);
-        task3 = viewRoot.findViewById(R.id.task3);
-        task4 = viewRoot.findViewById(R.id.task4);
+        time1 = viewRoot.findViewById(R.id.time1);
 //        spin.setOnItemSelectedListener(this);
 
         // Create the instance of ArrayAdapter
@@ -153,23 +157,32 @@ public class FloatingService extends Service {
         spin3.setAdapter(ad);
         spin4.setAdapter(ad);
 
+
     }
 
     private void save() {
         cnt++;
-        Map<String, Object> tasks = new HashMap<>();
-        tasks.put("task1", task1.getText().toString());
-        tasks.put("task2", task2.getText().toString());
-        tasks.put("task3", cnt);
+        Map<String, Object> dates = new HashMap<>();
+        Map<String, Object> tasks    = new HashMap<>();
+        Map<String, Object> details    = new HashMap<>();
 
+        details.put("desc", task1.getText().toString());
+        details.put("duration", time1.getText().toString());
+        details.put("tag", spin1.getSelectedItem().toString());
+
+        tasks.put("Task:"+Integer.toString(cnt),details);
 
         Date date = Calendar.getInstance().getTime();
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+//        small mm is minutes
+        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+        DateFormat timeFormat = new SimpleDateFormat("hh");
         String strDate = dateFormat.format(date);
+        String strTime = timeFormat.format(date);
+        dates.put("time:"+strTime,tasks);
 
 
         db.collection("task").document(strDate)
-                .set(tasks)
+                .set(dates, SetOptions.merge())
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
