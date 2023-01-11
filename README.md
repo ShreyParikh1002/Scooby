@@ -1,2 +1,4 @@
 # Scooby
-Work in progress   
+Work in progress  
+
+Android app to keep hourly track of activities .
