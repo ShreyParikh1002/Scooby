@@ -29,6 +29,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -38,6 +40,7 @@ import com.google.firebase.firestore.SetOptions;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -48,7 +51,7 @@ public class FloatingService extends Service {
     private WindowManager wm;
     private LinearLayout ll;
     ImageView close;
-    Button emergency,submit;
+    Button emergency,submit,add;
     View viewRoot;
     EditText task1,task2,task3,task4;
     EditText time1,time2,time3,time4;
@@ -57,6 +60,9 @@ public class FloatingService extends Service {
     String[] courses = { "","Morning", "DSA",
             "Friends", "Wasted","Food"
              };
+//    .................................................................................
+    ArrayList<task_struc> task_collection=new ArrayList<>();
+    RecyclerView recycle;
 //    ..................................................................................
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -109,16 +115,25 @@ public class FloatingService extends Service {
         }
 
         viewRoot = LayoutInflater.from(this).inflate(R.layout.floating_layout, null);
-        WindowManager.LayoutParams parameters=new WindowManager.LayoutParams(900, ViewGroup.LayoutParams.WRAP_CONTENT,LAYOUT_FLAG,WindowManager.LayoutParams.FLAG_BLUR_BEHIND, PixelFormat.TRANSLUCENT);
+        WindowManager.LayoutParams parameters=new WindowManager.LayoutParams(900, WindowManager.LayoutParams.WRAP_CONTENT,LAYOUT_FLAG,WindowManager.LayoutParams.FLAG_BLUR_BEHIND, PixelFormat.TRANSLUCENT);
         close = viewRoot.findViewById(R.id.window_close);
         emergency = viewRoot.findViewById(R.id.emergency);
         submit = viewRoot.findViewById(R.id.submit);
-        task1 =viewRoot.findViewById(R.id.task1);
-        task2 =viewRoot.findViewById(R.id.task2);
+//        task1 =viewRoot.findViewById(R.id.task1);
+//        task2 =viewRoot.findViewById(R.id.task2);
 
+        add=viewRoot.findViewById(R.id.add);
+        recycle=viewRoot.findViewById(R.id.recycle);
+        recycle.setLayoutManager(new LinearLayoutManager(this));
+        task_collection.add(new task_struc("time pass","30","wasted"));
+        task_collection.add(new task_struc("time pass","30","wasted"));
+        task_collection.add(new task_struc("time pass","30","wasted"));
+        task_recycler_adapter adapter=new task_recycler_adapter(this,task_collection);
+        recycle.setAdapter(adapter);
         close.setOnClickListener(view -> stopService());
         emergency.setOnClickListener(view -> stop());
         submit.setOnClickListener(view -> save());
+        add.setOnClickListener(view->addcard());
 
         parameters.x=0;
         parameters.y=0;
@@ -126,14 +141,14 @@ public class FloatingService extends Service {
         parameters.gravity= Gravity.CENTER| Gravity.CENTER;
         wm.addView(viewRoot,parameters);
 
-        spin1 = viewRoot.findViewById(R.id.spinner1);
-        spin2 = viewRoot.findViewById(R.id.spinner2);
-        spin3 = viewRoot.findViewById(R.id.spinner3);
-        spin4 = viewRoot.findViewById(R.id.spinner4);
+//        spin1 = viewRoot.findViewById(R.id.spinner1);
+//        spin2 = viewRoot.findViewById(R.id.spinner2);
+//        spin3 = viewRoot.findViewById(R.id.spinner3);
+//        spin4 = viewRoot.findViewById(R.id.spinner4);
 
-        task1 = viewRoot.findViewById(R.id.task1);
-        task2 = viewRoot.findViewById(R.id.task2);
-        time1 = viewRoot.findViewById(R.id.time1);
+//        task1 = viewRoot.findViewById(R.id.task1);
+//        task2 = viewRoot.findViewById(R.id.task2);
+//        time1 = viewRoot.findViewById(R.id.time1);
 //        spin.setOnItemSelectedListener(this);
 
         // Create the instance of ArrayAdapter
@@ -152,25 +167,33 @@ public class FloatingService extends Service {
 
         // Set the ArrayAdapter (ad) data on the
         // Spinner which binds data to spinner
-        spin1.setAdapter(ad);
-        spin2.setAdapter(ad);
-        spin3.setAdapter(ad);
-        spin4.setAdapter(ad);
+//        spin1.setAdapter(ad);
+//        spin2.setAdapter(ad);
+//        spin3.setAdapter(ad);
+//        spin4.setAdapter(ad);
 
 
+    }
+
+    private void addcard() {
+        task_collection.add(new task_struc("","",""));
+        task_recycler_adapter adapter=new task_recycler_adapter(this,task_collection);
+        recycle.setAdapter(adapter);
     }
 
     private void save() {
         cnt++;
         Map<String, Object> dates = new HashMap<>();
-        Map<String, Object> tasks    = new HashMap<>();
-        Map<String, Object> details    = new HashMap<>();
+//        Map<String, Object> tasks    = new HashMap<>();
+//        Map<String, Object> details    = new HashMap<>();
 
-        details.put("desc", task1.getText().toString());
-        details.put("duration", time1.getText().toString());
-        details.put("tag", spin1.getSelectedItem().toString());
+//        details.put("desc", task1.getText().toString());
+//        details.put("duration", time1.getText().toString());
+//        details.put("tag", spin1.getSelectedItem().toString());
+//
+//        tasks.put("Task:"+Integer.toString(cnt),details);
 
-        tasks.put("Task:"+Integer.toString(cnt),details);
+
 
         Date date = Calendar.getInstance().getTime();
 //        small mm is minutes
@@ -178,7 +201,7 @@ public class FloatingService extends Service {
         DateFormat timeFormat = new SimpleDateFormat("hh");
         String strDate = dateFormat.format(date);
         String strTime = timeFormat.format(date);
-        dates.put("time:"+strTime,tasks);
+        dates.put("time:"+strTime,task_collection);
 
 
         db.collection("task").document(strDate)
@@ -201,18 +224,18 @@ public class FloatingService extends Service {
 
     private void stopService() {
 //        prevents closing tab until task added
-        if(!task1.getText().toString().isEmpty() && !task2.getText().toString().isEmpty()){
-            try {
+//        if(!task1.getText().toString().isEmpty() && !task2.getText().toString().isEmpty()){
+//            try {
                 stopForeground(true);
                 stopSelf();
                 wm.removeViewImmediate(viewRoot);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        else{
-            Toast.makeText(this, "Please enter at least 2 task", Toast.LENGTH_SHORT).show();
-        }
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }
+//        else{
+//            Toast.makeText(this, "Please enter at least 2 task", Toast.LENGTH_SHORT).show();
+//        }
     }
     private void stop() {
 //        prevents closing tab until task added
