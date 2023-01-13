@@ -63,6 +63,7 @@ public class FloatingService extends Service {
 //    .................................................................................
     ArrayList<task_struc> task_collection=new ArrayList<>();
     RecyclerView recycle;
+    task_recycler_adapter adapter;
 //    ..................................................................................
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -125,10 +126,12 @@ public class FloatingService extends Service {
         add=viewRoot.findViewById(R.id.add);
         recycle=viewRoot.findViewById(R.id.recycle);
         recycle.setLayoutManager(new LinearLayoutManager(this));
-        task_collection.add(new task_struc("time pass","30","wasted"));
-        task_collection.add(new task_struc("time pass","30","wasted"));
-        task_collection.add(new task_struc("time pass","30","wasted"));
-        task_recycler_adapter adapter=new task_recycler_adapter(this,task_collection);
+
+
+        task_collection.add(new task_struc("","",""));
+
+
+        adapter=new task_recycler_adapter(this, task_collection);
         recycle.setAdapter(adapter);
         close.setOnClickListener(view -> stopService());
         emergency.setOnClickListener(view -> stop());
@@ -176,13 +179,28 @@ public class FloatingService extends Service {
     }
 
     private void addcard() {
+//        task_collection.clear();
+        for (int i = 0; i < recycle.getChildCount(); i++) {
+            task_recycler_adapter.ViewHolder holder = (task_recycler_adapter.ViewHolder) recycle.getChildViewHolder(recycle.getChildAt(i));
+            task_collection.get(i).task=holder.task.getText().toString();
+            task_collection.get(i).tag=holder.tag.getText().toString();
+            task_collection.get(i).time=holder.time.getText().toString();
+//            task_collection.add(new task_struc(holder.task.getText().toString(),holder.tag.getText().toString(),holder.time.getText().toString()));
+        }
         task_collection.add(new task_struc("","",""));
-        task_recycler_adapter adapter=new task_recycler_adapter(this,task_collection);
-        recycle.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
 
     private void save() {
         cnt++;
+//        task_collection.clear();
+        for (int i = 0; i < recycle.getChildCount(); i++) {
+            task_recycler_adapter.ViewHolder holder = (task_recycler_adapter.ViewHolder) recycle.getChildViewHolder(recycle.getChildAt(i));
+            task_collection.get(i).task=holder.task.getText().toString();
+            task_collection.get(i).tag=holder.tag.getText().toString();
+            task_collection.get(i).time=holder.time.getText().toString();
+//            task_collection.add(new task_struc(holder.task.getText().toString(),holder.tag.getText().toString(),holder.time.getText().toString()));
+        }
         Map<String, Object> dates = new HashMap<>();
 //        Map<String, Object> tasks    = new HashMap<>();
 //        Map<String, Object> details    = new HashMap<>();
