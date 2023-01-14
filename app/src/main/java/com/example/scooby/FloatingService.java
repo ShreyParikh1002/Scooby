@@ -135,7 +135,7 @@ public class FloatingService extends Service {
         courses.add("Friends");
         courses.add("Wasted");
         courses.add("Food");
-        task_collection.add(new task_struc("","",""));
+        task_collection.add(new task_struc("","","0"));
 
 
         adapter=new task_recycler_adapter(this, task_collection,courses);
@@ -163,17 +163,17 @@ public class FloatingService extends Service {
 
         // Create the instance of ArrayAdapter
         // having the list of courses
-        ArrayAdapter ad
-                = new ArrayAdapter(
-                this,
-                android.R.layout.simple_spinner_item,
-                courses);
-
-        // set simple layout resource file
-        // for each item of spinner
-        ad.setDropDownViewResource(
-                android.R.layout
-                        .simple_spinner_dropdown_item);
+//        ArrayAdapter ad
+//                = new ArrayAdapter(
+//                this,
+//                android.R.layout.simple_spinner_item,
+//                courses);
+//
+//        // set simple layout resource file
+//        // for each item of spinner
+//        ad.setDropDownViewResource(
+//                android.R.layout
+//                        .simple_spinner_dropdown_item);
 
         // Set the ArrayAdapter (ad) data on the
         // Spinner which binds data to spinner
@@ -188,13 +188,14 @@ public class FloatingService extends Service {
     private void addcard() {
 //        task_collection.clear();
         for (int i = 0; i < recycle.getChildCount(); i++) {
+            final String pos;
             task_recycler_adapter.ViewHolder holder = (task_recycler_adapter.ViewHolder) recycle.getChildViewHolder(recycle.getChildAt(i));
             task_collection.get(i).task=holder.task.getText().toString();
-            task_collection.get(i).tag=Integer.toString(holder.tag.getSelectedItemPosition());
+            task_collection.get(i).tag=holder.tag.getSelectedItem().toString();
             task_collection.get(i).time=holder.time.getText().toString();
 //            task_collection.add(new task_struc(holder.task.getText().toString(),holder.tag.getText().toString(),holder.time.getText().toString()));
         }
-        task_collection.add(new task_struc("","",""));
+        task_collection.add(new task_struc("","","0"));
         adapter.notifyDataSetChanged();
     }
 

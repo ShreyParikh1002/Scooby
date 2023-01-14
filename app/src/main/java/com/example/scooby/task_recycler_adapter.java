@@ -59,14 +59,10 @@ public class task_recycler_adapter extends RecyclerView.Adapter<task_recycler_ad
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         holder.tag.setAdapter(arrayAdapter);
         holder.task.setText(task_collection.get(position).task);
-        holder.tag.setSelection(Integer.parseInt((task_collection.get(position).tag)));
+        holder.tag.setSelection(arrayAdapter.getPosition((task_collection.get(position).tag)));
         holder.time.setText(task_collection.get(position).time);
-//        add.setOnClickListener(view->addcard());
     }
 
-    private void addcard() {
-
-    }
 
     @Override
     public int getItemCount() {
