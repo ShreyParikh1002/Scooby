@@ -57,9 +57,11 @@ public class FloatingService extends Service {
     EditText time1,time2,time3,time4;
     Spinner spin1,spin2,spin3,spin4;
     int cnt=0;
-    String[] courses = { "","Morning", "DSA",
-            "Friends", "Wasted","Food"
-             };
+    ArrayList<String> courses = new ArrayList<String>();
+
+//    ,"Morning", "DSA",
+//            "Friends", "Wasted","Food"
+//             };
 //    .................................................................................
     ArrayList<task_struc> task_collection=new ArrayList<>();
     RecyclerView recycle;
@@ -127,11 +129,16 @@ public class FloatingService extends Service {
         recycle=viewRoot.findViewById(R.id.recycle);
         recycle.setLayoutManager(new LinearLayoutManager(this));
 
-
+        courses.add("");
+        courses.add("Morning");
+        courses.add("DSA");
+        courses.add("Friends");
+        courses.add("Wasted");
+        courses.add("Food");
         task_collection.add(new task_struc("","",""));
 
 
-        adapter=new task_recycler_adapter(this, task_collection);
+        adapter=new task_recycler_adapter(this, task_collection,courses);
         recycle.setAdapter(adapter);
         close.setOnClickListener(view -> stopService());
         emergency.setOnClickListener(view -> stop());
@@ -183,7 +190,7 @@ public class FloatingService extends Service {
         for (int i = 0; i < recycle.getChildCount(); i++) {
             task_recycler_adapter.ViewHolder holder = (task_recycler_adapter.ViewHolder) recycle.getChildViewHolder(recycle.getChildAt(i));
             task_collection.get(i).task=holder.task.getText().toString();
-            task_collection.get(i).tag=holder.tag.getText().toString();
+            task_collection.get(i).tag=Integer.toString(holder.tag.getSelectedItemPosition());
             task_collection.get(i).time=holder.time.getText().toString();
 //            task_collection.add(new task_struc(holder.task.getText().toString(),holder.tag.getText().toString(),holder.time.getText().toString()));
         }
@@ -197,7 +204,7 @@ public class FloatingService extends Service {
         for (int i = 0; i < recycle.getChildCount(); i++) {
             task_recycler_adapter.ViewHolder holder = (task_recycler_adapter.ViewHolder) recycle.getChildViewHolder(recycle.getChildAt(i));
             task_collection.get(i).task=holder.task.getText().toString();
-            task_collection.get(i).tag=holder.tag.getText().toString();
+            task_collection.get(i).tag=holder.tag.getSelectedItem().toString();
             task_collection.get(i).time=holder.time.getText().toString();
 //            task_collection.add(new task_struc(holder.task.getText().toString(),holder.tag.getText().toString(),holder.time.getText().toString()));
         }

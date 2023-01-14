@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -19,10 +20,27 @@ import java.util.ArrayList;
 public class task_recycler_adapter extends RecyclerView.Adapter<task_recycler_adapter.ViewHolder> {
     Context context;
     ArrayList<task_struc> task_collection;
-    Button add;
-    task_recycler_adapter(Context context,ArrayList<task_struc> task_collection){
+    ArrayList<String> courses;
+
+
+//    ArrayAdapter ad
+//            = new ArrayAdapter(
+//            this,
+//            android.R.layout.simple_spinner_item,
+//            courses);
+
+    // set simple layout resource file
+    // for each item of spinner
+//        ad.setDropDownViewResource(
+//    android.R.layout
+//            .simple_spinner_dropdown_item);
+
+
+    task_recycler_adapter(Context context,ArrayList<task_struc> task_collection, ArrayList<String> courses){
         this.context=context;
         this.task_collection=task_collection;
+        this.courses=courses;
+
     }
     @NonNull
     @Override
@@ -36,8 +54,12 @@ public class task_recycler_adapter extends RecyclerView.Adapter<task_recycler_ad
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context,android.R.layout.simple_spinner_item, courses);
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        holder.tag.setAdapter(arrayAdapter);
         holder.task.setText(task_collection.get(position).task);
-        holder.tag.setText(task_collection.get(position).tag);
+        holder.tag.setSelection(Integer.parseInt((task_collection.get(position).tag)));
         holder.time.setText(task_collection.get(position).time);
 //        add.setOnClickListener(view->addcard());
     }
@@ -52,7 +74,8 @@ public class task_recycler_adapter extends RecyclerView.Adapter<task_recycler_ad
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        EditText task,time,tag;
+        EditText task,time;
+        Spinner tag;
         LinearLayout ll;
 //        Spinner tag;
         public ViewHolder(@NonNull View itemView) {
@@ -61,7 +84,6 @@ public class task_recycler_adapter extends RecyclerView.Adapter<task_recycler_ad
             time=itemView.findViewById(R.id.time1);
             tag=itemView.findViewById(R.id.spinner1);
             ll =itemView.findViewById(R.id.window_content1);
-            add=itemView.findViewById(R.id.add);
         }
     }
 }
