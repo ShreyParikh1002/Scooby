@@ -187,8 +187,9 @@ public class FloatingService extends Service {
 
     private void addcard() {
 //        task_collection.clear();
+//        recycle.getLayoutManager().scrollToPosition();
         for (int i = 0; i < recycle.getChildCount(); i++) {
-            final String pos;
+//            recycle.getLayoutManager().scrollToPosition(i);
             task_recycler_adapter.ViewHolder holder = (task_recycler_adapter.ViewHolder) recycle.getChildViewHolder(recycle.getChildAt(i));
             task_collection.get(i).task=holder.task.getText().toString();
             task_collection.get(i).tag=holder.tag.getSelectedItem().toString();
@@ -227,7 +228,8 @@ public class FloatingService extends Service {
         DateFormat timeFormat = new SimpleDateFormat("hh");
         String strDate = dateFormat.format(date);
         String strTime = timeFormat.format(date);
-        dates.put("time:"+strTime,task_collection);
+        int intTime=Integer.parseInt(strTime);
+        dates.put("time:"+(intTime-1)+"-"+intTime,task_collection);
 
 
         db.collection("task").document(strDate)
