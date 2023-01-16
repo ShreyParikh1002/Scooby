@@ -4,6 +4,8 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -29,7 +31,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+//......................................
+        AlarmManager alarmy=(AlarmManager) getSystemService(ALARM_SERVICE);
+        long triggerTime=System.currentTimeMillis();
+        Toast.makeText(this, Long.toString(triggerTime), Toast.LENGTH_SHORT).show();
+        Intent broadcast=new Intent(MainActivity.this,hourlyReceiver.class);
+        PendingIntent pi=PendingIntent.getBroadcast(MainActivity.this,100,broadcast,PendingIntent.FLAG_MUTABLE);
+        alarmy.set(AlarmManager.RTC_WAKEUP,triggerTime,pi);
+//.................................................................................................
         Button scoob=(Button) findViewById(R.id.scoob);
         scoob.setOnClickListener(view -> {
             if (!Settings.canDrawOverlays(MainActivity.this)) {
