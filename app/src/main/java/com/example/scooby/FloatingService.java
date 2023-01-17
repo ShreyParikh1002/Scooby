@@ -5,13 +5,17 @@ import static android.content.ContentValues.TAG;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.IBinder;
+import android.os.Vibrator;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -56,6 +60,7 @@ public class FloatingService extends Service {
     EditText task1,task2,task3,task4;
     EditText time1,time2,time3,time4;
     Spinner spin1,spin2,spin3,spin4;
+    Vibrator v ;
     int cnt=0;
     ArrayList<String> courses = new ArrayList<String>();
 
@@ -66,6 +71,7 @@ public class FloatingService extends Service {
     ArrayList<task_struc> task_collection=new ArrayList<>();
     RecyclerView recycle;
     task_recycler_adapter adapter;
+    MediaPlayer mp;
 //    ..................................................................................
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -89,6 +95,23 @@ public class FloatingService extends Service {
 
     public void onCreate() {
         super.onCreate();
+
+//..................................................................................
+//        mp= MediaPlayer.create(this, Settings.System.DEFAULT_RINGTONE_URI);
+//        mp.setLooping(true);
+//        mp.start();
+
+        v=(Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+// Start without a delay
+// Vibrate for 100 milliseconds
+// Sleep for 1000 milliseconds
+        long[] pattern = {0, 1000, 1000};
+
+// The '0' here means to repeat indefinitely
+// '0' is actually the index at which the pattern keeps repeating from (the start)
+// To repeat the pattern from any other point, you could increase the index, e.g. '1'
+        v.vibrate(pattern, 0);
+//..................................................................................
         wm =(WindowManager ) getSystemService(WINDOW_SERVICE);
         int LAYOUT_FLAG;
 //        seeking required permissions
@@ -140,8 +163,9 @@ public class FloatingService extends Service {
 
         adapter=new task_recycler_adapter(this, task_collection,courses);
         recycle.setAdapter(adapter);
+        close.setEnabled(false);
         close.setOnClickListener(view -> stopService());
-        emergency.setOnClickListener(view -> stop());
+        emergency.setOnClickListener(view -> emergency_stop());
         submit.setOnClickListener(view -> save());
         add.setOnClickListener(view->addcard());
 
@@ -188,84 +212,113 @@ public class FloatingService extends Service {
     private void addcard() {
 //        task_collection.clear();
 //        recycle.getLayoutManager().scrollToPosition();
+        int proceed=1;
         for (int i = 0; i < recycle.getChildCount(); i++) {
 //            recycle.getLayoutManager().scrollToPosition(i);
             task_recycler_adapter.ViewHolder holder = (task_recycler_adapter.ViewHolder) recycle.getChildViewHolder(recycle.getChildAt(i));
-            task_collection.get(i).task=holder.task.getText().toString();
-            task_collection.get(i).tag=holder.tag.getSelectedItem().toString();
-            task_collection.get(i).time=holder.time.getText().toString();
+            String getTask,getTag,getTime;
+            getTask = holder.task.getText().toString();;
+            getTime=holder.time.getText().toString();
+            getTag=holder.tag.getSelectedItem().toString();
+            if(getTask=="" || getTime=="" || getTag==""){
+                Toast.makeText(this, "Please enter all fields", Toast.LENGTH_SHORT).show();
+                proceed=0;
+                break;
+            }
+            task_collection.get(i).task=getTask;
+            task_collection.get(i).time=getTime;
+            task_collection.get(i).tag=getTag;
 //            task_collection.add(new task_struc(holder.task.getText().toString(),holder.tag.getText().toString(),holder.time.getText().toString()));
         }
-        task_collection.add(new task_struc("","","0"));
-        adapter.notifyDataSetChanged();
+        if(proceed==1) {
+            task_collection.add(new task_struc("", "", "0"));
+            adapter.notifyDataSetChanged();
+
+            v.cancel();
+        }
+        //        mp.stop();
     }
 
     private void save() {
         cnt++;
+        int proceed=1;
 //        task_collection.clear();
         for (int i = 0; i < recycle.getChildCount(); i++) {
             task_recycler_adapter.ViewHolder holder = (task_recycler_adapter.ViewHolder) recycle.getChildViewHolder(recycle.getChildAt(i));
-            task_collection.get(i).task=holder.task.getText().toString();
-            task_collection.get(i).tag=holder.tag.getSelectedItem().toString();
-            task_collection.get(i).time=holder.time.getText().toString();
+            String getTask,getTag,getTime;
+            getTask = holder.task.getText().toString();;
+            getTime=holder.time.getText().toString();
+            getTag=holder.tag.getSelectedItem().toString();
+            if(getTask=="" || getTime=="" || getTag==""){
+                Toast.makeText(this, "Please enter all fields", Toast.LENGTH_SHORT).show();
+                proceed=0;
+                break;
+            }
+            task_collection.get(i).task=getTask;
+            task_collection.get(i).time=getTime;
+            task_collection.get(i).tag=getTag;
 //            task_collection.add(new task_struc(holder.task.getText().toString(),holder.tag.getText().toString(),holder.time.getText().toString()));
         }
-        Map<String, Object> dates = new HashMap<>();
-//        Map<String, Object> tasks    = new HashMap<>();
-//        Map<String, Object> details    = new HashMap<>();
+        if (proceed==1){
+            Map<String, Object> dates = new HashMap<>();
+    //        Map<String, Object> tasks    = new HashMap<>();
+    //        Map<String, Object> details    = new HashMap<>();
 
-//        details.put("desc", task1.getText().toString());
-//        details.put("duration", time1.getText().toString());
-//        details.put("tag", spin1.getSelectedItem().toString());
-//
-//        tasks.put("Task:"+Integer.toString(cnt),details);
-
-
-
-        Date date = Calendar.getInstance().getTime();
-//        small mm is minutes
-        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
-        DateFormat timeFormat = new SimpleDateFormat("hh");
-        String strDate = dateFormat.format(date);
-        String strTime = timeFormat.format(date);
-        int intTime=Integer.parseInt(strTime);
-        dates.put("time:"+(intTime-1)+"-"+intTime,task_collection);
+    //        details.put("desc", task1.getText().toString());
+    //        details.put("duration", time1.getText().toString());
+    //        details.put("tag", spin1.getSelectedItem().toString());
+    //
+    //        tasks.put("Task:"+Integer.toString(cnt),details);
 
 
-        db.collection("task").document(strDate)
-                .set(dates, SetOptions.merge())
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "DocumentSnapshot successfully written!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error writing document", e);
-                    }
-                });
 
+            Date date = Calendar.getInstance().getTime();
+    //        small mm is minutes
+            DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+            DateFormat timeFormat = new SimpleDateFormat("hh");
+            String strDate = dateFormat.format(date);
+            String strTime = timeFormat.format(date);
+            int intTime=Integer.parseInt(strTime);
+            dates.put("time:"+(intTime-1)+"-"+intTime,task_collection);
+
+
+            db.collection("task").document(strDate)
+                    .set(dates, SetOptions.merge())
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d(TAG, "DocumentSnapshot successfully written!");
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.w(TAG, "Error writing document", e);
+                        }
+                    });
+    //        mp.stop();
+                v.cancel();
+            stopService();}
     }
 
 
     private void stopService() {
 //        prevents closing tab until task added
 //        if(!task1.getText().toString().isEmpty() && !task2.getText().toString().isEmpty()){
-//            try {
+            try {
                 stopForeground(true);
                 stopSelf();
                 wm.removeViewImmediate(viewRoot);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 //        }
 //        else{
 //            Toast.makeText(this, "Please enter at least 2 task", Toast.LENGTH_SHORT).show();
 //        }
+        v.cancel();
     }
-    private void stop() {
+    private void emergency_stop() {
 //        prevents closing tab until task added
             try {
                 stopForeground(true);
@@ -274,7 +327,7 @@ public class FloatingService extends Service {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
+        v.cancel();
     }
 }
 
