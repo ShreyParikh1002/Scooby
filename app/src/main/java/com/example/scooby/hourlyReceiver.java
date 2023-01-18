@@ -42,9 +42,15 @@ public class hourlyReceiver extends BroadcastReceiver {
 //            }
 //        }
         AlarmManager alarmy=(AlarmManager) context.getSystemService(context.ALARM_SERVICE);
-        long triggerTime=System.currentTimeMillis();
-        triggerTime=(triggerTime-((triggerTime-(5*60+30)*60*1000)%(60*60*1000)))+(61*60*1000);
-//        Toast.makeText(this, Long.toString(triggerTime), Toast.LENGTH_SHORT).show();
+        long triggerTime=System.currentTimeMillis()+(5*60+30)*60*1000;
+        if((triggerTime-((triggerTime)%(60*60*1000)))%(24*60*60*1000)==0){
+            triggerTime=(triggerTime-((triggerTime)%(60*60*1000)))+(8*60*60*1000)-(5*60+30)*60*1000;
+        }
+        else{
+            triggerTime=(triggerTime-((triggerTime)%(60*60*1000)))+(61*60*1000)-(5*60+30)*60*1000;
+//            triggerTime=(triggerTime-((triggerTime+(5*60+30)*60*1000)%(60*60*1000)))+(61*60*1000);
+        Toast.makeText(context,"yeah", Toast.LENGTH_SHORT).show();
+        }
         Intent broadcast=new Intent(context,hourlyReceiver.class);
         PendingIntent pi=PendingIntent.getBroadcast(context,100,broadcast,PendingIntent.FLAG_MUTABLE);
         alarmy.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,triggerTime,pi);

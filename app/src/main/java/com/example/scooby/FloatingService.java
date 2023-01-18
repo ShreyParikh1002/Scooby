@@ -57,9 +57,6 @@ public class FloatingService extends Service {
     ImageView close;
     Button emergency,submit,add;
     View viewRoot;
-    EditText task1,task2,task3,task4;
-    EditText time1,time2,time3,time4;
-    Spinner spin1,spin2,spin3,spin4;
     Vibrator v ;
     int cnt=0;
     ArrayList<String> courses = new ArrayList<String>();
@@ -155,7 +152,10 @@ public class FloatingService extends Service {
         courses.add("");
         courses.add("Morning");
         courses.add("DSA");
+        courses.add("Class");
+        courses.add("Studying");
         courses.add("Friends");
+        courses.add("Family");
         courses.add("Wasted");
         courses.add("Food");
         task_collection.add(new task_struc("","","0"));
@@ -275,10 +275,11 @@ public class FloatingService extends Service {
             Date date = Calendar.getInstance().getTime();
     //        small mm is minutes
             DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
-            DateFormat timeFormat = new SimpleDateFormat("hh");
+            DateFormat timeFormat = new SimpleDateFormat("kk");
             String strDate = dateFormat.format(date);
             String strTime = timeFormat.format(date);
             int intTime=Integer.parseInt(strTime);
+//            if(intTime>=12)
             dates.put("time:"+(intTime-1)+"-"+intTime,task_collection);
 
 

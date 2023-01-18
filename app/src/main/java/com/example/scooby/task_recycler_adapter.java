@@ -1,6 +1,8 @@
 package com.example.scooby;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,6 +63,38 @@ public class task_recycler_adapter extends RecyclerView.Adapter<task_recycler_ad
         holder.task.setText(task_collection.get(position).task);
         holder.tag.setSelection(arrayAdapter.getPosition((task_collection.get(position).tag)));
         holder.time.setText(task_collection.get(position).time);
+        holder.time.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                task_collection.remove(holder.getAdapterPosition());
+                notifyItemRemoved(holder.getAdapterPosition());
+                return true;
+            }
+        });
+        holder.ll.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+//                AlertDialog.Builder confirmDelete=new AlertDialog.Builder(context)
+//                        .setTitle("Delete card")
+//                        .setMessage("Are you sure you want to delete this entry?")
+//                        .setIcon(R.drawable.ic_baseline_delete_24)
+//                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialogInterface, int i) {
+                                task_collection.remove(holder.getAdapterPosition());
+                                notifyItemRemoved(holder.getAdapterPosition());
+//                            }
+//                        })
+//                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialogInterface, int i) {
+//
+//                            }
+//                        });
+//                confirmDelete.show();
+                return true;
+            }
+        });
     }
 
 
