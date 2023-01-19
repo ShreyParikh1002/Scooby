@@ -100,7 +100,7 @@ public class FloatingService extends Service {
 
         v=(Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 // Start without a delay
-// Vibrate for 100 milliseconds
+// Vibrate for 1000 milliseconds
 // Sleep for 1000 milliseconds
         long[] pattern = {0, 1000, 1000};
 
@@ -153,11 +153,14 @@ public class FloatingService extends Service {
         courses.add("Morning");
         courses.add("DSA");
         courses.add("Class");
-        courses.add("Studying");
-        courses.add("Friends");
-        courses.add("Family");
+        courses.add("Development");
         courses.add("Wasted");
+        courses.add("Binging");
         courses.add("Food");
+        courses.add("Studying");
+        courses.add("Family");
+        courses.add("Applying/searching");
+        courses.add("Friends");
         task_collection.add(new task_struc("","","0"));
 
 
@@ -279,8 +282,19 @@ public class FloatingService extends Service {
             String strDate = dateFormat.format(date);
             String strTime = timeFormat.format(date);
             int intTime=Integer.parseInt(strTime);
-//            if(intTime>=12)
-            dates.put("time:"+(intTime-1)+"-"+intTime,task_collection);
+            if(intTime<10){
+                strTime="time:0"+(intTime-1)+"-0"+intTime;
+            }
+            else if(intTime==10){
+                strTime="time:0"+(intTime-1)+"-"+intTime;
+            }
+            else{
+                strTime="time:"+(intTime-1)+"-"+intTime;
+            }
+            dates.put(strTime,task_collection);
+            if(intTime==24){
+                strDate=(Integer.parseInt(strDate.substring(0,2))-1)+strDate.substring(2);
+            }
 
 
             db.collection("task").document(strDate)
