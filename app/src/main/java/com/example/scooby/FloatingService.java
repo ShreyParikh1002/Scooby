@@ -154,13 +154,16 @@ public class FloatingService extends Service {
         courses.add("DSA");
         courses.add("Class");
         courses.add("Development");
+        courses.add("Creative proc");
         courses.add("Wasted");
         courses.add("Binging");
         courses.add("Food");
         courses.add("Studying");
         courses.add("Family");
         courses.add("Applying/searching");
-        courses.add("Friends");
+        courses.add("Friends/room");
+        courses.add("Extra Sleep");
+        courses.add("Exercise");
         task_collection.add(new task_struc("","","0"));
 
 
