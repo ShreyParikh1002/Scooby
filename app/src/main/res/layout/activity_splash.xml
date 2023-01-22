@@ -2,6 +2,7 @@
 <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/animationView"
@@ -11,4 +12,15 @@
         app:lottie_rawRes="@raw/animation1"
         app:lottie_autoPlay="true"
         app:lottie_loop="true"/>
+    <com.google.android.gms.common.SignInButton
+        android:layout_width="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="20dp"
+        android:layout_height="wrap_content"/>
+<!--    <Button-->
+<!--        android:id="@+id/login"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_gravity="center"-->
+<!--        android:text="login"/>-->
 </androidx.appcompat.widget.LinearLayoutCompat>
