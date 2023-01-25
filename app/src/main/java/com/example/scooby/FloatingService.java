@@ -299,7 +299,7 @@ public class FloatingService extends Service {
                 strDate=(Integer.parseInt(strDate.substring(0,2))-1)+strDate.substring(2);
             }
 
-
+            db.collection("task").whereArrayContains(strTime,"Tag");
             db.collection("task").document(strDate)
                     .set(dates, SetOptions.merge())
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
