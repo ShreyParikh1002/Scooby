@@ -49,7 +49,7 @@ public class hourlyReceiver extends BroadcastReceiver {
         else{
             triggerTime=(triggerTime-((triggerTime)%(60*60*1000)))+(61*60*1000)-(5*60+30)*60*1000;
 //            triggerTime=(triggerTime-((triggerTime+(5*60+30)*60*1000)%(60*60*1000)))+(61*60*1000);
-        Toast.makeText(context,"yeah", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(context,"yeah", Toast.LENGTH_SHORT).show();
         }
         Intent broadcast=new Intent(context,hourlyReceiver.class);
         PendingIntent pi=PendingIntent.getBroadcast(context,100,broadcast,PendingIntent.FLAG_MUTABLE);

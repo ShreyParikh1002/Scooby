@@ -116,4 +116,10 @@ Lorem ipsum dolor sit amet, consectetur adipis, sed hendrerit purus elementum. M
 <!--Nullam sollicitudin justo finibus, feugiat sapien ac, venenatis risus. Donec vitae neque aliquam, viverra quam ac, luctus neque. Maecenas ullamcorper ipsum libero, sit amet molestie nunc vehicula nec. Nulla id mollis ligula. Vestibulum vestibulum augue a varius iaculis. In maximus lobortis tortor, a imperdiet mi viverra vitae. Cras tortor orci, fermentum non mattis quis, porttitor facilisis dui. Etiam arcu neque, congue quis tortor quis, eleifend tristique urna. Nullam vitae elit dapibus neque sollicitudin tristique in sed felis. Etiam varius velit quis elit consectetur efficitur. Nullam facilisis porttitor arcu eget aliquam. Sed in elit hendrerit, ultricies mauris et, aliquam turpis."-->
 <!--           />-->
     </androidx.core.widget.NestedScrollView>
+    <com.ismaeldivita.chipnavigation.ChipNavigationBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@color/white"
+        app:cnb_menuResource="@menu/bottommenu" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

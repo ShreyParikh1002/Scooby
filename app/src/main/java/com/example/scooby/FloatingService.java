@@ -102,12 +102,12 @@ public class FloatingService extends Service {
 // Start without a delay
 // Vibrate for 1000 milliseconds
 // Sleep for 1000 milliseconds
-        long[] pattern = {0, 1000, 1000};
+        long[] pattern = {0, 1000, 1000,1000, 1000,1000, 1000,1000, 1000,1000, 1000,1000, 1000,1000, 1000,1000, 1000,1000, 1000,1000, 1000};
 
 // The '0' here means to repeat indefinitely
 // '0' is actually the index at which the pattern keeps repeating from (the start)
 // To repeat the pattern from any other point, you could increase the index, e.g. '1'
-        v.vibrate(pattern, 0);
+        v.vibrate(pattern, -1);
 //..................................................................................
         wm =(WindowManager ) getSystemService(WINDOW_SERVICE);
         int LAYOUT_FLAG;
@@ -296,7 +296,13 @@ public class FloatingService extends Service {
             }
             dates.put(strTime,task_collection);
             if(intTime==24){
-                strDate=(Integer.parseInt(strDate.substring(0,2))-1)+strDate.substring(2);
+                int prevdate=(Integer.parseInt(strDate.substring(0,2))-1);
+                if(prevdate<10){
+                    strDate="0"+prevdate+strDate.substring(2);
+                }
+                else{
+                    strDate=prevdate+strDate.substring(2);
+                }
             }
 
             db.collection("task").whereArrayContains(strTime,"Tag");
