@@ -3,9 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/bottom_nav_dashboard"
-        android:title="Dashboard"
-        android:icon="@drawable/bottom_nav_dashboard_icon"
-        app:cnb_backgroundColor="@color/colorPrimary/>
+        android:id="@+id/bottom_nav_dashboard1"
+        android:title="Home"
+        android:icon="@drawable/ic_baseline_home_24"
+        app:cnb_backgroundColor="#333333"/>
+    <item
+        android:id="@+id/bottom_nav_dashboard2"
+        android:title="Analytics"
+        android:icon="@drawable/ic_baseline_pie_chart_24"
+        app:cnb_backgroundColor="#333333"/>
+    <item
+        android:id="@+id/bottom_nav_dashboard3"
+        android:title="Settings"
+        android:icon="@drawable/ic_baseline_settings_24"
+        app:cnb_backgroundColor="#333333"/>
 
 </menu>

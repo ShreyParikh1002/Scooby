@@ -89,13 +89,13 @@ Lorem ipsum dolor sit amet, consectetur adipis, sed hendrerit purus elementum. M
 <!--                android:layout_weight="2"-->
 <!--                android:text="Submit" />-->
 
-            <Button
-                android:id="@+id/scoob"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:layout_gravity="center"
-                android:text="Add" />
+<!--            <Button-->
+<!--                android:id="@+id/scoob"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_margin="5dp"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:text="Add" />-->
 <!--        </LinearLayout>-->
 
 </LinearLayout>
@@ -120,6 +120,12 @@ Lorem ipsum dolor sit amet, consectetur adipis, sed hendrerit purus elementum. M
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:background="@color/white"
+        android:background="@drawable/round_corners"
+        app:cnb_unselectedColor="@color/black"
+        app:cnb_radius="8dp"
+        app:cnb_orientationMode="horizontal"
+        android:layout_margin="30dp"
+        android:elevation="8dp"
+        android:padding="5dp"
         app:cnb_menuResource="@menu/bottommenu" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

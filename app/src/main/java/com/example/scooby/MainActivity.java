@@ -44,18 +44,18 @@ public class MainActivity extends AppCompatActivity {
         PendingIntent pi=PendingIntent.getBroadcast(MainActivity.this,100,broadcast,PendingIntent.FLAG_MUTABLE);
         alarmy.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,triggerTime,pi);
 //.................................................................................................
-        Button scoob=(Button) findViewById(R.id.scoob);
-        scoob.setOnClickListener(view -> {
-            if (!Settings.canDrawOverlays(MainActivity.this)) {
-                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
-                activityResultLauncher.launch(intent);
-            } else {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    startForegroundService(new Intent(MainActivity.this, FloatingService.class));
-                } else {
-                    startService(new Intent(MainActivity.this, FloatingService.class));
-                }
-            }
-        });
+//        Button scoob=(Button) findViewById(R.id.scoob);
+//        scoob.setOnClickListener(view -> {
+//            if (!Settings.canDrawOverlays(MainActivity.this)) {
+//                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
+//                activityResultLauncher.launch(intent);
+//            } else {
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//                    startForegroundService(new Intent(MainActivity.this, FloatingService.class));
+//                } else {
+//                    startService(new Intent(MainActivity.this, FloatingService.class));
+//                }
+//            }
+//        });
     }
 }
