@@ -15,3 +15,9 @@ But why so many constraints? ~ so that these don't get ignored
  like your hourly drink water reminders 😂.
 
 Now heres the pop up
+
+First field is the activity name, then the time
+devoted and then the activity tag like wasted, 
+productive, friends and family, etc.
+
+Currently working on the front-end and report generation part.
