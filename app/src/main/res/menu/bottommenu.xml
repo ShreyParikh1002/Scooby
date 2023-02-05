@@ -3,17 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/bottom_nav_dashboard1"
+        android:id="@+id/bottom_nav_home"
         android:title="Home"
         android:icon="@drawable/ic_baseline_home_24"
         app:cnb_backgroundColor="#333333"/>
     <item
-        android:id="@+id/bottom_nav_dashboard2"
+        android:id="@+id/bottom_nav_analytics"
         android:title="Analytics"
         android:icon="@drawable/ic_baseline_pie_chart_24"
         app:cnb_backgroundColor="#333333"/>
     <item
-        android:id="@+id/bottom_nav_dashboard3"
+        android:id="@+id/bottom_nav_settings"
         android:title="Settings"
         android:icon="@drawable/ic_baseline_settings_24"
         app:cnb_backgroundColor="#333333"/>

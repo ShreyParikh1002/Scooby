@@ -3,6 +3,7 @@ package com.example.scooby;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -15,11 +16,24 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.ismaeldivita.chipnavigation.ChipNavigationBar;
+
 public class MainActivity extends AppCompatActivity {
+    ChipNavigationBar chipNavigationBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+//........................................................................
+        chipNavigationBar = findViewById(R.id.nav);
+        chipNavigationBar.setItemSelected(R.id.nav,
+                true);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container,
+                        new Home()).commit();
+        bottomMenu();
+//........................................................................
 
         ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             if (result.getResultCode() == RESULT_OK) {
@@ -57,5 +71,30 @@ public class MainActivity extends AppCompatActivity {
 //                }
 //            }
 //        });
+    }
+
+
+    private void bottomMenu() {
+        chipNavigationBar.setOnItemSelectedListener
+                (new ChipNavigationBar.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(int i) {
+                        Fragment fragment = null;
+                        switch (i){
+                            case R.id.bottom_nav_home:
+                                fragment = new Home();
+                                break;
+                            case R.id.bottom_nav_analytics:
+                                fragment = new Analytics();
+                                break;
+                            case R.id.bottom_nav_settings:
+                                fragment = new AppSettings();
+                                break;
+                        }
+                        getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.fragment_container,
+                                        fragment).commit();
+                    }
+                });
     }
 }

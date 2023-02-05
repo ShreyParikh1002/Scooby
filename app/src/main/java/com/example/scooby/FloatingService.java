@@ -150,15 +150,16 @@ public class FloatingService extends Service {
         recycle.setLayoutManager(new LinearLayoutManager(this));
 
         courses.add("");
-        courses.add("Morning");
         courses.add("DSA");
         courses.add("Class");
         courses.add("Development");
-        courses.add("Creative proc");
+        courses.add("Morning");
         courses.add("Wasted");
         courses.add("Binging");
+        courses.add("Enjoyment");
         courses.add("Food");
         courses.add("Studying");
+        courses.add("Creative proc");
         courses.add("Family");
         courses.add("Applying/searching");
         courses.add("Friends/room");
