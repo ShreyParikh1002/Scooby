@@ -39,6 +39,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 
@@ -305,8 +306,11 @@ public class FloatingService extends Service {
                     strDate=prevdate+strDate.substring(2);
                 }
             }
-
-            db.collection("task").whereArrayContains(strTime,"Tag");
+            // TODO: 06-02-2023 integrate this update method as a replacement for adding
+//            DocumentReference updateRef=db.collection("task").document(strDate);
+//            for (int i = 0; i < task_collection.size(); i++) {
+//                updateRef.update(strTime, FieldValue.arrayUnion(task_collection.get(i)));
+//            }
             db.collection("task").document(strDate)
                     .set(dates, SetOptions.merge())
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -321,8 +325,7 @@ public class FloatingService extends Service {
                             Log.w(TAG, "Error writing document", e);
                         }
                     });
-    //        mp.stop();
-                v.cancel();
+            v.cancel();
             stopService();}
     }
 
