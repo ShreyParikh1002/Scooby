@@ -1,15 +1,14 @@
 package com.example.scooby;
 
-public class task_struc {
-//    bcoz default scope in java is package private
-    public String task;
-    public String time;
-    public String tag;
-    public task_struc(){ }
-    public task_struc(String task,String time,String tag){
+public class firestorestruc {
+    private String tag;
+    private String task;
+    private String time;
+    public firestorestruc(){ }
+    public firestorestruc(String task,String time,String tag){
+        this.tag=tag;
         this.task=task;
         this.time=time;
-        this.tag=tag;
     }
 
     public String getTask() {
