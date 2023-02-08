@@ -17,6 +17,7 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -29,7 +30,7 @@ import com.google.firebase.firestore.Query;
 public class Home extends Fragment {
 
     private FirebaseFirestore db=FirebaseFirestore.getInstance();
-    private CollectionReference taskRef=db.collection("task2");
+    private DocumentReference taskRef=db.collection("task2").document("date").collection("08-02-2023").document("tasks");
     private firestoreAdapter fsadapter;
     RecyclerView fsrecycler;
 

@@ -23,7 +23,8 @@ public class firestoreAdapter extends FirestoreRecyclerAdapter<firestorestruc,fi
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull taskHolder holder, int position, @NonNull firestorestruc model) {
+    protected void onBindViewHolder(@NonNull taskHolder holder, int position, @NonNull firestorestruc
+            model) {
         holder.fstime.setText(model.getTime());
         holder.fstag.setText(model.getTag());
         holder.fstask.setText(model.getTask());
