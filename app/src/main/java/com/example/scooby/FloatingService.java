@@ -39,6 +39,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
@@ -49,6 +50,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -268,7 +270,7 @@ public class FloatingService extends Service {
 //            task_collection.add(new task_struc(holder.task.getText().toString(),holder.tag.getText().toString(),holder.time.getText().toString()));
         }
         if (proceed==1){
-            Map<String, Object> dates = new HashMap<>();
+            Map<String, ArrayList<task_struc>> dates = new HashMap<>();
     //        Map<String, Object> tasks    = new HashMap<>();
     //        Map<String, Object> details    = new HashMap<>();
 
@@ -296,7 +298,7 @@ public class FloatingService extends Service {
             else{
                 strTime="time:"+(intTime-1)+"-"+intTime;
             }
-            dates.put(strTime,task_collection);
+            dates.put("hi",task_collection);
             if(intTime==24){
                 int prevdate=(Integer.parseInt(strDate.substring(0,2))-1);
                 if(prevdate<10){
@@ -311,12 +313,14 @@ public class FloatingService extends Service {
 //            for (int i = 0; i < task_collection.size(); i++) {
 //                updateRef.update(strTime, FieldValue.arrayUnion(task_collection.get(i)));
 //            }
+//            db.collection("userid").document("date").collection("09-02-2023").document("tasks")
             db.collection("task").document(strDate)
                     .set(dates, SetOptions.merge())
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
                             Log.d(TAG, "DocumentSnapshot successfully written!");
+
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
@@ -325,6 +329,25 @@ public class FloatingService extends Service {
                             Log.w(TAG, "Error writing document", e);
                         }
                     });
+//            db.collection("task").document("07-02-2023").get()
+//                    .addOnCompleteListener(task -> {
+//                        if (task.isSuccessful()) {
+//                            DocumentSnapshot document = task.getResult();
+//                            if (document.exists()) {
+//                                Map<String, Object> users = document.getData();
+//                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+//                                    users.forEach((k, v) -> Log.i("tag","Key = "
+//                                            + k + ", Value = " + v));
+//                                }
+////                                Log.i("TAG", users.get(0).get(users.get(0).keySet().toArray()[0]));
+//
+//                            }
+//                        }
+//                    });
+            for(Object d:dates.values()){
+//                                fsdataliist=(ArrayList<task_struc>) d;
+                Log.i("tag",d+"");
+            }
             v.cancel();
             stopService();}
     }

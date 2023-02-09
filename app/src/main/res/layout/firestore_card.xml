@@ -31,11 +31,13 @@
                 android:id="@+id/firestoretime"
                 android:layout_width="0dp"
                 android:layout_weight="1"
+                android:textColor="@color/black"
                 android:text="10"
                 android:background="#00ced1"
                 android:layout_height="match_parent"/>
             <TextView
                 android:id="@+id/firestoretag"
+                android:textColor="@color/black"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:gravity="right"
@@ -46,6 +48,7 @@
         <TextView
             android:id="@+id/firestoretask"
             android:layout_width="match_parent"
+            android:textColor="@color/black"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:background="#ffd700"

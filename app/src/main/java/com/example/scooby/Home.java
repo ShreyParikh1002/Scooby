@@ -1,5 +1,6 @@
 package com.example.scooby;
 
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,12 +16,17 @@ import android.view.ViewGroup;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -30,8 +36,8 @@ import com.google.firebase.firestore.Query;
 public class Home extends Fragment {
 
     private FirebaseFirestore db=FirebaseFirestore.getInstance();
-    private DocumentReference taskRef=db.collection("task2").document("date").collection("08-02-2023").document("tasks");
-    private firestoreAdapter fsadapter;
+    private firestore_adapter fsadapter;
+    ArrayList<task_struc> fsdataliist=new ArrayList<>();
     RecyclerView fsrecycler;
 
     // TODO: Rename parameter arguments, choose names that match
@@ -88,20 +94,16 @@ public class Home extends Fragment {
 
 
     private void setUpRecyclerView(){
-        Query query = taskRef;
-        firestorestruc f=new firestorestruc("a","b","c");
-//        taskRef.document("15-02-2023").set(f);
-        FirestoreRecyclerOptions<firestorestruc> options=new FirestoreRecyclerOptions.Builder<firestorestruc>()
-                .setQuery(query,firestorestruc.class)
-                .build();
-        Log.d("TAG", "DocumentSnapshot data: " + options);
-        fsadapter=new firestoreAdapter(options);
-
-
-//        fsrecycler.setHasFixedSize(true);
-        fsadapter.startListening();
-        fsrecycler.setLayoutManager(new LinearLayoutManager(getContext()));
-        fsrecycler.setAdapter(fsadapter);
+//        Query query = taskRef;
+//        firestorestruc f=new firestorestruc("a","b","c");
+////        taskRef.document("15-02-2023").set(f);
+//        FirestoreRecyclerOptions<firestorestruc> options=new FirestoreRecyclerOptions.Builder<firestorestruc>()
+//                .setQuery(query,firestorestruc.class)
+//                .build();
+//        Log.d("TAG", "DocumentSnapshot data: " + options);
+//        fsadapter=new firestoreAdapter(options);
+//        fsadapter.startListening();
+//        fsrecycler.setAdapter(fsadapter);
 //        taskRef.document("07-02-2023").get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
 //            @Override
 //            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -117,17 +119,65 @@ public class Home extends Fragment {
 //                }
 //            }
 //        });
-    }
-//
-    @Override
-    public void onStart() {
-        super.onStart();
-        fsadapter.startListening();
+//        db.collection("userid").document("date").collection("09-02-2023").document("tasks")
+//                .set
+
+        fsrecycler.setLayoutManager(new LinearLayoutManager(getContext()));
+//        fsdataliist=new ArrayList<>();
+        fsadapter=new firestore_adapter(fsdataliist);
+        fsrecycler.setAdapter(fsadapter);
+
+        db.collection("task").document("07-02-2023").get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            Map<String, Object> users = document.getData();
+                            for(Object d:users.values()){
+                                ArrayList<HashMap<String,String>> a=new ArrayList<>();
+                                a= (ArrayList<HashMap<String,String>>) d;
+                                for(int i=0;i<a.size();i++){
+//                                    Map<String,String>=a.get(i);
+                                    String p,q,r;
+                                    p=a.get(i).get("task");
+                                    q=a.get(i).get("time");
+                                    r=a.get(i).get("tag");
+                                    fsdataliist.add(new task_struc(p,q,r));
+//                                    HashMap<String,String>
+//                                    a.get(i).get("tag");
+                                Log.i("tag",a.get(i).get("tag").getClass().getSimpleName()+"");
+                                }
+                            }
+//                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+//                                users.forEach((k, v) ->
+//                                        firestorestruc obj=v.toObject(firestorestruc.class);
+//                                            fsdataliist.add(obj)
+//                                );
+//                            }
+//                                Log.i("TAG", users.get(0).get(users.get(0).keySet().toArray()[0]));
+
+                        }
+                    }
+                                    fsadapter.notifyDataSetChanged();
+                });
+
+            Log.i("tag",fsdataliist.size()+"");
+//        for (int i = 0; i < fsdataliist.size(); i++)
+
+            // Printing and display the elements in ArrayList
+//        fsdataliist.add(new task_struc("a","b","c"));
+        fsadapter.notifyDataSetChanged();
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        fsadapter.stopListening();
-    }
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//        fsadapter.startListening();
+//    }
+//
+//    @Override
+//    public void onStop() {
+//        super.onStop();
+//        fsadapter.stopListening();
+//    }
 }

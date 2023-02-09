@@ -1,9 +1,9 @@
 package com.example.scooby;
 
 public class firestorestruc {
-    private String tag;
     private String task;
     private String time;
+    private String tag;
     public firestorestruc(){ }
     public firestorestruc(String task,String time,String tag){
         this.tag=tag;
