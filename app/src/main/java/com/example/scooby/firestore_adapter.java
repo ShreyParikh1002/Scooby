@@ -32,6 +32,7 @@ public class firestore_adapter extends RecyclerView.Adapter<firestore_adapter.fs
         holder.fstime.setText(fsdatalist.get(position).getTime());
         holder.fstag.setText(fsdatalist.get(position).getTag());
         holder.fstask.setText(fsdatalist.get(position).getTask());
+        holder.fshour.setText(fsdatalist.get(position).getHour());
     }
 
     @Override
@@ -40,12 +41,13 @@ public class firestore_adapter extends RecyclerView.Adapter<firestore_adapter.fs
     }
 
     class fsviewholder extends RecyclerView.ViewHolder{
-        TextView fstime,fstag,fstask;
+        TextView fstime,fstag,fstask,fshour;
         public fsviewholder(@NonNull View itemView) {
             super(itemView);
             fstime=itemView.findViewById(R.id.firestoretime);
             fstag=itemView.findViewById(R.id.firestoretag);
             fstask=itemView.findViewById(R.id.firestoretask);
+            fshour=itemView.findViewById(R.id.firestorehour);
         }
     }
 }

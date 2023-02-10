@@ -5,11 +5,13 @@ public class task_struc {
     public String task;
     public String time;
     public String tag;
+    public String hour;
     public task_struc(){ }
-    public task_struc(String task,String time,String tag){
+    public task_struc(String task,String time,String tag,String hour){
         this.task=task;
         this.time=time;
         this.tag=tag;
+        this.hour=hour;
     }
 
     public String getTask() {
@@ -22,5 +24,9 @@ public class task_struc {
 
     public String getTag() {
         return tag;
+    }
+
+    public String getHour() {
+        return hour;
     }
 }

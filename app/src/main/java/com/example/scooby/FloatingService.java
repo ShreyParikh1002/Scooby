@@ -63,6 +63,13 @@ public class FloatingService extends Service {
     Vibrator v ;
     int cnt=0;
     ArrayList<String> courses = new ArrayList<String>();
+    Date date = Calendar.getInstance().getTime();
+    //        small mm is minutes
+    DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+    DateFormat timeFormat = new SimpleDateFormat("kk");
+    String strDate = dateFormat.format(date);
+    String strTime = timeFormat.format(date);
+    int intTime=Integer.parseInt(strTime);
 
 //    ,"Morning", "DSA",
 //            "Friends", "Wasted","Food"
@@ -168,7 +175,7 @@ public class FloatingService extends Service {
         courses.add("Friends/room");
         courses.add("Extra Sleep");
         courses.add("Exercise");
-        task_collection.add(new task_struc("","","0"));
+        task_collection.add(new task_struc("","","0",""));
 
 
         adapter=new task_recycler_adapter(this, task_collection,courses);
@@ -238,10 +245,11 @@ public class FloatingService extends Service {
             task_collection.get(i).task=getTask;
             task_collection.get(i).time=getTime;
             task_collection.get(i).tag=getTag;
+            task_collection.get(i).hour=Integer.toString(intTime-1);
 //            task_collection.add(new task_struc(holder.task.getText().toString(),holder.tag.getText().toString(),holder.time.getText().toString()));
         }
         if(proceed==1) {
-            task_collection.add(new task_struc("", "", "0"));
+            task_collection.add(new task_struc("", "", "0",""));
             adapter.notifyDataSetChanged();
 
             v.cancel();
@@ -267,6 +275,7 @@ public class FloatingService extends Service {
             task_collection.get(i).task=getTask;
             task_collection.get(i).time=getTime;
             task_collection.get(i).tag=getTag;
+            task_collection.get(i).hour=Integer.toString(intTime-1);
 //            task_collection.add(new task_struc(holder.task.getText().toString(),holder.tag.getText().toString(),holder.time.getText().toString()));
         }
         if (proceed==1){
@@ -282,13 +291,7 @@ public class FloatingService extends Service {
 
 
 
-            Date date = Calendar.getInstance().getTime();
-    //        small mm is minutes
-            DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
-            DateFormat timeFormat = new SimpleDateFormat("kk");
-            String strDate = dateFormat.format(date);
-            String strTime = timeFormat.format(date);
-            int intTime=Integer.parseInt(strTime);
+
             if(intTime<10){
                 strTime="time:0"+(intTime-1)+"-0"+intTime;
             }
@@ -298,7 +301,7 @@ public class FloatingService extends Service {
             else{
                 strTime="time:"+(intTime-1)+"-"+intTime;
             }
-            dates.put("hi",task_collection);
+            dates.put(strTime,task_collection);
             if(intTime==24){
                 int prevdate=(Integer.parseInt(strDate.substring(0,2))-1);
                 if(prevdate<10){

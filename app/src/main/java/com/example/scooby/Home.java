@@ -24,9 +24,16 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -122,31 +129,57 @@ public class Home extends Fragment {
 //        db.collection("userid").document("date").collection("09-02-2023").document("tasks")
 //                .set
 
+        Date date = Calendar.getInstance().getTime();
+        //        small mm is minutes
+        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+        DateFormat timeFormat = new SimpleDateFormat("kk");
+        String strDate = dateFormat.format(date);
+        String strTime = timeFormat.format(date);
+        int intTime=Integer.parseInt(strTime);
+
+        if(intTime==24){
+            int prevdate=(Integer.parseInt(strDate.substring(0,2))-1);
+            if(prevdate<10){
+                strDate="0"+prevdate+strDate.substring(2);
+            }
+            else{
+                strDate=prevdate+strDate.substring(2);
+            }
+        }
+
+
+
         fsrecycler.setLayoutManager(new LinearLayoutManager(getContext()));
 //        fsdataliist=new ArrayList<>();
         fsadapter=new firestore_adapter(fsdataliist);
         fsrecycler.setAdapter(fsadapter);
 
-        db.collection("task").document("07-02-2023").get()
+        db.collection("task").document(strDate).get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         DocumentSnapshot document = task.getResult();
                         if (document.exists()) {
                             Map<String, Object> users = document.getData();
+                            users = new TreeMap<String, Object>(users);
+//                            Collections.sort(users);
+                            for(String d:users.keySet()){
+                                Log.i("TAG",d+"");
+                            }
                             for(Object d:users.values()){
-                                ArrayList<HashMap<String,String>> a=new ArrayList<>();
-                                a= (ArrayList<HashMap<String,String>>) d;
+                                ArrayList<Map<String,String>> a=new ArrayList<>();
+                                a= (ArrayList<Map<String,String>>) d;
                                 for(int i=0;i<a.size();i++){
 //                                    Map<String,String>=a.get(i);
-                                    String p,q,r;
+                                    String p,q,r,s;
                                     p=a.get(i).get("task");
                                     q=a.get(i).get("time");
                                     r=a.get(i).get("tag");
-                                    fsdataliist.add(new task_struc(p,q,r));
+                                    s=a.get(i).get("hour");
+                                    fsdataliist.add(new task_struc(p,q,r,s));
 //                                    HashMap<String,String>
 //                                    a.get(i).get("tag");
-                                Log.i("tag",a.get(i).get("tag").getClass().getSimpleName()+"");
                                 }
+                                Log.i("tag",a+"");
                             }
 //                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
 //                                users.forEach((k, v) ->
@@ -167,6 +200,7 @@ public class Home extends Fragment {
             // Printing and display the elements in ArrayList
 //        fsdataliist.add(new task_struc("a","b","c"));
         fsadapter.notifyDataSetChanged();
+
     }
 
 //    @Override
