@@ -1,11 +1,13 @@
 package com.example.scooby;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -29,10 +31,21 @@ public class firestore_adapter extends RecyclerView.Adapter<firestore_adapter.fs
 
     @Override
     public void onBindViewHolder(@NonNull fsviewholder holder, int position) {
-        holder.fstime.setText(fsdatalist.get(position).getTime());
-        holder.fstag.setText(fsdatalist.get(position).getTag());
-        holder.fstask.setText(fsdatalist.get(position).getTask());
-        holder.fshour.setText(fsdatalist.get(position).getHour());
+        if(fsdatalist.get(position).getTask()==""){
+            holder.fshour.setText(fsdatalist.get(position).getHour());
+            holder.fstime.setText(fsdatalist.get(position).getTime());
+            holder.fstask.setText(fsdatalist.get(position).getTask());
+            holder.fstime.setBackgroundColor(Color.parseColor("#00000000"));
+            holder.fstask.setBackgroundColor(Color.parseColor("#00000000"));
+            holder.fstag.setBackgroundColor(Color.parseColor("#00000000"));
+            holder.fscard.setBackgroundColor(Color.parseColor("#00000000"));
+        }
+        if(fsdatalist.get(position).getTask()!=""){
+            holder.fstime.setText(fsdatalist.get(position).getTime());
+            holder.fstag.setText(fsdatalist.get(position).getTag());
+            holder.fstask.setText(fsdatalist.get(position).getTask());
+            holder.fshour.setBackgroundColor(Color.parseColor("#00000000"));
+        }
     }
 
     @Override
@@ -42,8 +55,10 @@ public class firestore_adapter extends RecyclerView.Adapter<firestore_adapter.fs
 
     class fsviewholder extends RecyclerView.ViewHolder{
         TextView fstime,fstag,fstask,fshour;
+        CardView fscard;
         public fsviewholder(@NonNull View itemView) {
             super(itemView);
+            fscard=itemView.findViewById(R.id.card);
             fstime=itemView.findViewById(R.id.firestoretime);
             fstag=itemView.findViewById(R.id.firestoretag);
             fstask=itemView.findViewById(R.id.firestoretask);

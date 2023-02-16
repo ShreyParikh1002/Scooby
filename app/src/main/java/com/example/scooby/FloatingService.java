@@ -36,8 +36,10 @@ import androidx.core.app.NotificationCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
@@ -258,6 +260,9 @@ public class FloatingService extends Service {
     }
 
     private void save() {
+
+
+
         cnt++;
         int proceed=1;
 //        task_collection.clear();
@@ -292,16 +297,16 @@ public class FloatingService extends Service {
 
 
 
-            if(intTime<10){
-                strTime="time:0"+(intTime-1)+"-0"+intTime;
-            }
-            else if(intTime==10){
-                strTime="time:0"+(intTime-1)+"-"+intTime;
-            }
-            else{
-                strTime="time:"+(intTime-1)+"-"+intTime;
-            }
-            dates.put(strTime,task_collection);
+//            if(intTime<10){
+                strTime=Integer.toString(intTime-1);
+//            }
+//            else if(intTime==10){
+//                strTime="time:0"+(intTime-1)+"-"+intTime;
+//            }
+//            else{
+//                strTime=Integer.toString(intTime-1);
+//            }
+            dates.put(Integer.toString(intTime),task_collection);
             if(intTime==24){
                 int prevdate=(Integer.parseInt(strDate.substring(0,2))-1);
                 if(prevdate<10){
@@ -312,26 +317,54 @@ public class FloatingService extends Service {
                 }
             }
             // TODO: 06-02-2023 integrate this update method as a replacement for adding
-//            DocumentReference updateRef=db.collection("task").document(strDate);
-//            for (int i = 0; i < task_collection.size(); i++) {
-//                updateRef.update(strTime, FieldValue.arrayUnion(task_collection.get(i)));
-//            }
 //            db.collection("userid").document("date").collection("09-02-2023").document("tasks")
-            db.collection("task").document(strDate)
-                    .set(dates, SetOptions.merge())
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            Log.d(TAG, "DocumentSnapshot successfully written!");
+            DocumentReference id= db.collection("task").document(strDate);
+            id.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            Log.i("TAG", "Document exists!");
+                        } else {
+                            Log.i("TAG", "Document does not exist!");
+                            ArrayList<task_struc> empty=new ArrayList<>();
+                            empty.add(new task_struc("", "", "0",""));
+                            for(int i=8;i<=24;i++){
+                                empty.get(0).hour=Integer.toString(i);
+                                Map<String, ArrayList<task_struc>> initialise = new HashMap<>();
+                                initialise.put(Integer.toString(i),empty);
+                                id.set(initialise, SetOptions.merge());
+                            }
+                        }
+                    }
+                    else {
+                        Log.i("TAG", "Failed with: ", task.getException());
+                    }
+                }
+            });
 
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.w(TAG, "Error writing document", e);
-                        }
-                    });
+            DocumentReference updateRef=db.collection("task").document(strDate);
+            for (int i = 0; i < task_collection.size(); i++) {
+                updateRef.update(strTime, FieldValue.arrayUnion(task_collection.get(i)));
+            }
+//            **************************************************************************************************orignal
+//                    id.set(dates, SetOptions.merge())
+//                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+//                        @Override
+//                        public void onSuccess(Void aVoid) {
+//                            Log.d(TAG, "DocumentSnapshot successfully written!");
+//
+//                        }
+//                    })
+//                    .addOnFailureListener(new OnFailureListener() {
+//                        @Override
+//                        public void onFailure(@NonNull Exception e) {
+//                            Log.w(TAG, "Error writing document", e);
+//                        }
+//                    });
+//            *********************************************************************************************************
+
 //            db.collection("task").document("07-02-2023").get()
 //                    .addOnCompleteListener(task -> {
 //                        if (task.isSuccessful()) {

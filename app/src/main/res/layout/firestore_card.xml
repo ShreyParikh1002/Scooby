@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:textColor="@color/black"
         android:padding="5dp"
-        android:text="-1"
+        android:text="  "
         android:layout_gravity="center"
         android:gravity="center"/>
 <androidx.cardview.widget.CardView
@@ -20,6 +20,7 @@
     android:layout_height="wrap_content"
     app:cardCornerRadius="30dp"
     android:layout_margin="10dp"
+    android:id="@+id/card"
     app:cardBackgroundColor="@color/purple_500">
     <LinearLayout
         android:layout_width="match_parent"
@@ -36,7 +37,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:textColor="@color/black"
-                android:text="ERROR"
+                android:text=""
                 android:background="#00ced1"
                 android:layout_height="match_parent"/>
             <TextView
@@ -47,7 +48,7 @@
                 android:gravity="right"
                 android:background="#ffe4e1"
                 android:layout_height="match_parent"
-                android:text="ERROR"/>
+                android:text=""/>
         </LinearLayout>
         <TextView
             android:id="@+id/firestoretask"
@@ -56,7 +57,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:background="#ffd700"
-            android:text="ERROR"/>
+            android:text=""/>
     </LinearLayout>
 </androidx.cardview.widget.CardView>
 </LinearLayout>

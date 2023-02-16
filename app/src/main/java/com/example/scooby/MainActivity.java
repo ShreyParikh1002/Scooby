@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         }
 //......................................
         AlarmManager alarmy=(AlarmManager) getSystemService(ALARM_SERVICE);
-        long triggerTime=System.currentTimeMillis()+(20*1000);
+        long triggerTime=System.currentTimeMillis()+(10*1000);
 //        Toast.makeText(this, Long.toString(triggerTime), Toast.LENGTH_SHORT).show();
         Intent broadcast=new Intent(MainActivity.this,hourlyReceiver.class);
         PendingIntent pi=PendingIntent.getBroadcast(MainActivity.this,100,broadcast,PendingIntent.FLAG_MUTABLE);
