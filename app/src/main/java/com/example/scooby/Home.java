@@ -13,6 +13,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -46,6 +48,7 @@ public class Home extends Fragment {
     private firestore_adapter fsadapter;
     ArrayList<task_struc> fsdataliist=new ArrayList<>();
     RecyclerView fsrecycler;
+    View v;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -93,9 +96,10 @@ public class Home extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        View v= inflater.inflate(R.layout.fragment_home, container, false);
+        v= inflater.inflate(R.layout.fragment_home, container, false);
         fsrecycler=v.findViewById(R.id.firestoreRecycler);
         setUpRecyclerView();
+        current();
         return v;
     }
 
@@ -175,7 +179,12 @@ public class Home extends Fragment {
                                     q=a.get(i).get("time");
                                     r=a.get(i).get("tag");
                                     s=a.get(i).get("hour");
-                                    fsdataliist.add(new task_struc(p,q,r,s));
+                                    if(Integer.parseInt(s)<=intTime+1){
+                                         fsdataliist.add(new task_struc(p,q,r,s));
+                                    }
+                                    else{
+                                        break;
+                                    }
 //                                    HashMap<String,String>
 //                                    a.get(i).get("tag");
                                 }
@@ -214,4 +223,32 @@ public class Home extends Fragment {
 //        super.onStop();
 //        fsadapter.stopListening();
 //    }
+    public void current(){
+        Spinner tagcur=v.findViewById(R.id.currentspinner);
+        Spinner timecur=v.findViewById(R.id.currentspinner);
+        Spinner taskcur=v.findViewById(R.id.currentspinner);
+        ArrayList<String> courses = new ArrayList<String>();
+        courses.add("");
+        courses.add("DSA");
+        courses.add("Class");
+        courses.add("Development");
+        courses.add("Morning");
+        courses.add("Wasted");
+        courses.add("Binging");
+        courses.add("Enjoyment");
+        courses.add("Food");
+        courses.add("Studying");
+        courses.add("Creative proc");
+        courses.add("Family");
+        courses.add("Applying/searching");
+        courses.add("Friends/room");
+        courses.add("Extra Sleep");
+        courses.add("Exercise");
+        ArrayAdapter ad
+                = new ArrayAdapter(getContext(),android.R.layout.simple_spinner_item,courses);
+        ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        tagcur.setAdapter(ad);
+
+
+    }
 }

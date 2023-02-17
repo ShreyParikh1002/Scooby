@@ -217,9 +217,9 @@ public class FloatingService extends Service {
 //        ad.setDropDownViewResource(
 //                android.R.layout
 //                        .simple_spinner_dropdown_item);
-
-        // Set the ArrayAdapter (ad) data on the
-        // Spinner which binds data to spinner
+//
+//         Set the ArrayAdapter (ad) data on the
+//         Spinner which binds data to spinner
 //        spin1.setAdapter(ad);
 //        spin2.setAdapter(ad);
 //        spin3.setAdapter(ad);
@@ -297,15 +297,15 @@ public class FloatingService extends Service {
 
 
 
-//            if(intTime<10){
-                strTime=Integer.toString(intTime-1);
-//            }
+            if(intTime<=10){
+                strTime="0"+Integer.toString(intTime-1);
+            }
 //            else if(intTime==10){
 //                strTime="time:0"+(intTime-1)+"-"+intTime;
 //            }
-//            else{
-//                strTime=Integer.toString(intTime-1);
-//            }
+            else{
+                strTime=Integer.toString(intTime-1);
+            }
             dates.put(Integer.toString(intTime),task_collection);
             if(intTime==24){
                 int prevdate=(Integer.parseInt(strDate.substring(0,2))-1);
@@ -333,7 +333,14 @@ public class FloatingService extends Service {
                             for(int i=8;i<=24;i++){
                                 empty.get(0).hour=Integer.toString(i);
                                 Map<String, ArrayList<task_struc>> initialise = new HashMap<>();
-                                initialise.put(Integer.toString(i),empty);
+                                String initialStr;
+                                if(i<10){
+                                    initialStr="0"+Integer.toString(i);
+                                }
+                                else{
+                                    initialStr=Integer.toString(i);
+                                }
+                                initialise.put(initialStr,empty);
                                 id.set(initialise, SetOptions.merge());
                             }
                         }
@@ -380,10 +387,10 @@ public class FloatingService extends Service {
 //                            }
 //                        }
 //                    });
-            for(Object d:dates.values()){
-//                                fsdataliist=(ArrayList<task_struc>) d;
-                Log.i("tag",d+"");
-            }
+//            for(Object d:dates.values()){
+////                                fsdataliist=(ArrayList<task_struc>) d;
+//                Log.i("tag",d+"");
+//            }
             v.cancel();
             stopService();}
     }

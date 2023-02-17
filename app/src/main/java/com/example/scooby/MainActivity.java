@@ -26,13 +26,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 //........................................................................
-        chipNavigationBar = findViewById(R.id.nav);
-        chipNavigationBar.setItemSelected(R.id.nav,
-                true);
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container,
-                        new Home()).commit();
-        bottomMenu();
+//        chipNavigationBar = findViewById(R.id.nav);
+//        chipNavigationBar.setItemSelected(R.id.nav,
+//                true);
+//        getSupportFragmentManager().beginTransaction()
+//                .replace(R.id.fragment_container,
+//                        new Home()).commit();
+//        bottomMenu();
 //........................................................................
 
         ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
@@ -71,6 +71,13 @@ public class MainActivity extends AppCompatActivity {
 //                }
 //            }
 //        });
+        chipNavigationBar = findViewById(R.id.nav);
+        chipNavigationBar.setItemSelected(R.id.nav,
+                true);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container,
+                        new Home()).commit();
+        bottomMenu();
     }
 
 
