@@ -284,7 +284,7 @@ public class FloatingService extends Service {
 //            task_collection.add(new task_struc(holder.task.getText().toString(),holder.tag.getText().toString(),holder.time.getText().toString()));
         }
         if (proceed==1){
-            Map<String, ArrayList<task_struc>> dates = new HashMap<>();
+//            Map<String, ArrayList<task_struc>> dates = new HashMap<>();
     //        Map<String, Object> tasks    = new HashMap<>();
     //        Map<String, Object> details    = new HashMap<>();
 
@@ -306,7 +306,7 @@ public class FloatingService extends Service {
             else{
                 strTime=Integer.toString(intTime-1);
             }
-            dates.put(Integer.toString(intTime),task_collection);
+//            dates.put(Integer.toString(intTime),task_collection);
             if(intTime==24){
                 int prevdate=(Integer.parseInt(strDate.substring(0,2))-1);
                 if(prevdate<10){
@@ -326,6 +326,9 @@ public class FloatingService extends Service {
                         DocumentSnapshot document = task.getResult();
                         if (document.exists()) {
                             Log.i("TAG", "Document exists!");
+                            for (int i = 0; i < task_collection.size(); i++) {
+                                id.update(strTime, FieldValue.arrayUnion(task_collection.get(i)));
+                            }
                         } else {
                             Log.i("TAG", "Document does not exist!");
                             ArrayList<task_struc> empty=new ArrayList<>();
@@ -343,6 +346,9 @@ public class FloatingService extends Service {
                                 initialise.put(initialStr,empty);
                                 id.set(initialise, SetOptions.merge());
                             }
+                            for (int i = 0; i < task_collection.size(); i++) {
+                                id.update(strTime, FieldValue.arrayUnion(task_collection.get(i)));
+                            }
                         }
                     }
                     else {
@@ -351,10 +357,10 @@ public class FloatingService extends Service {
                 }
             });
 
-            DocumentReference updateRef=db.collection("task").document(strDate);
-            for (int i = 0; i < task_collection.size(); i++) {
-                updateRef.update(strTime, FieldValue.arrayUnion(task_collection.get(i)));
-            }
+//            DocumentReference updateRef=db.collection("task").document(strDate);
+//            for (int i = 0; i < task_collection.size(); i++) {
+//                updateRef.update(strTime, FieldValue.arrayUnion(task_collection.get(i)));
+//            }
 //            **************************************************************************************************orignal
 //                    id.set(dates, SetOptions.merge())
 //                    .addOnSuccessListener(new OnSuccessListener<Void>() {
