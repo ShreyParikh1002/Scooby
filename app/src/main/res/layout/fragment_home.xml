@@ -67,7 +67,7 @@
                 android:padding="5dp"
                 android:layout_weight="1"
                 android:layout_margin="20dp"
-                android:background="#00ced1"
+                android:background="@drawable/current_round"
                 android:orientation="horizontal">
                 <!--input task one-->
                 <EditText

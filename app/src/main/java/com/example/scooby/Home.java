@@ -37,6 +37,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
@@ -233,7 +234,7 @@ class Home extends Fragment
 
         // Printing and display the elements in ArrayList
         //        fsdataliist.add(new task_struc("a","b","c"));
-        fsadapter.notifyDataSetChanged();
+//        fsadapter.notifyDataSetChanged();
     }
 
     //    @Override
@@ -327,6 +328,17 @@ class Home extends Fragment
                                 {
                                     Log.i("TAG", "Document exists!");
                                     id.update(finalStrTime, FieldValue.arrayUnion(new task_struc(getTask,getTime,getTag, finalStrTime1)));
+                                    fsdataliist.add(new task_struc(getTask,getTime,getTag, finalStrTime1));
+                                    Collections.sort(fsdataliist, new Comparator<task_struc>() {
+                                        @Override
+                                        public int compare(task_struc t1, task_struc t2) {
+                                            if(t1.hour==t2.hour) {
+                                                return 0;
+                                            }
+                                            return Integer.parseInt(t1.hour) < Integer.parseInt(t2.hour) ? -1 : 1;
+                                        }
+                                    });
+                                    fsadapter.notifyDataSetChanged();
                                     taskcur.setText("");
                                     timecur.setText("");
                                     tagcur.setSelection(0);
