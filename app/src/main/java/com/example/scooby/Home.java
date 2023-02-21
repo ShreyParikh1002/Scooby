@@ -57,7 +57,7 @@ class Home extends Fragment
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     private
     firestore_adapter fsadapter;
-    ArrayList<task_struc> fsdataliist = new ArrayList<>();
+    ArrayList<task_struc> fsdatalist = new ArrayList<>();
     RecyclerView fsrecycler;
     View v;
 
@@ -176,47 +176,60 @@ class Home extends Fragment
 
         fsrecycler.setLayoutManager(new LinearLayoutManager(getContext()));
         //        fsdataliist=new ArrayList<>();
-        fsadapter = new firestore_adapter(fsdataliist);
+        fsadapter = new firestore_adapter(fsdatalist);
         fsrecycler.setAdapter(fsadapter);
 
-        db.collection("task2").document(strDate).get().addOnCompleteListener(task->{
+        db.collection("task2").document("21-02-2023").get().addOnCompleteListener(task->{
             if (task.isSuccessful())
             {
                 DocumentSnapshot document = task.getResult();
                 if (document.exists())
                 {
-                    Map<String, Object> users = document.getData();
-                    users = new TreeMap<String, Object>(users);
-                    //                            Collections.sort(users);
-                    for (String d : users.keySet())
-                    {
-                        Log.i("TAG", d + "");
-                    }
-                    for (Object d : users.values())
-                    {
-                        ArrayList<Map<String, String>> a = new ArrayList<>();
-                        a = (ArrayList<Map<String, String>>)d;
-                        for (int i = 0; i < a.size(); i++)
-                        {
-                            //                                    Map<String,String>=a.get(i);
-                            String p, q, r, s;
-                            p = a.get(i).get("task");
-                            q = a.get(i).get("time");
-                            r = a.get(i).get("tag");
-                            s = a.get(i).get("hour");
-//                            if (Integer.parseInt(s) <= intTime + 1)
-//                            {
-                                fsdataliist.add(new task_struc(p, q, r, s));
-//                            }
-//                            else
-//                            {
-//                                break;
-//                            }
-                            //                                    HashMap<String,String>
-                            //                                    a.get(i).get("tag");
+                    fsdatalist.addAll(document.toObject(retrieve_POJO.class).task);
+                    Collections.sort(fsdatalist, new Comparator<task_struc>() {
+                        @Override
+                        public int compare(task_struc t1, task_struc t2) {
+                            if(t1.hour==t2.hour) {
+                                return 0;
+                            }
+                            return Integer.parseInt(t1.hour) < Integer.parseInt(t2.hour) ? -1 : 1;
                         }
-                        Log.i("tag", a + "");
-                    }
+                    });
+//                    Log.i("TAG", fsdatalist+"");
+//                    Log.i("TAG", fsdatalist + "");
+                    fsadapter.notifyDataSetChanged();
+//                    Log.i("tag", fsdatalist.get(0).getHour() );
+//                    users = new TreeMap<String, Object>(users);
+//                    //                            Collections.sort(users);
+//                    for (String d : users.keySet())
+//                    {
+//                        Log.i("TAG", d + "");
+//                    }
+//                    for (Object d : users.values())
+//                    {
+//                        ArrayList<Map<String, String>> a = new ArrayList<>();
+//                        a = (ArrayList<Map<String, String>>)d;
+//                        for (int i = 0; i < a.size(); i++)
+//                        {
+//                            //                                    Map<String,String>=a.get(i);
+//                            String p, q, r, s;
+//                            p = a.get(i).get("task");
+//                            q = a.get(i).get("time");
+//                            r = a.get(i).get("tag");
+//                            s = a.get(i).get("hour");
+////                            if (Integer.parseInt(s) <= intTime + 1)
+////                            {
+//                                fsdataliist.add(new task_struc(p, q, r, s));
+////                            }
+////                            else
+////                            {
+////                                break;
+////                            }
+//                            //                                    HashMap<String,String>
+//                            //                                    a.get(i).get("tag");
+//                        }
+//                        Log.i("tag", a + "");
+//                    }
                     //                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     //                                users.forEach((k, v) ->
                     //                                        firestorestruc obj=v.toObject(firestorestruc.class);
@@ -226,19 +239,8 @@ class Home extends Fragment
                     //                                Log.i("TAG", users.get(0).get(users.get(0).keySet().toArray()[0]));
                 }
             }
-            Collections.sort(fsdataliist, new Comparator<task_struc>() {
-                @Override
-                public int compare(task_struc t1, task_struc t2) {
-                    if(t1.hour==t2.hour) {
-                        return 0;
-                    }
-                    return Integer.parseInt(t1.hour) < Integer.parseInt(t2.hour) ? -1 : 1;
-                }
-            });
-            fsadapter.notifyDataSetChanged();
         });
 
-        Log.i("tag", fsdataliist.size() + "");
         //        for (int i = 0; i < fsdataliist.size(); i++)
 
         // Printing and display the elements in ArrayList
@@ -337,8 +339,8 @@ class Home extends Fragment
                                 {
                                     Log.i("TAG", "Document exists!");
                                     id.update("task", FieldValue.arrayUnion(new task_struc(getTask,getTime,getTag, finalStrTime1)));
-                                    fsdataliist.add(new task_struc(getTask,getTime,getTag, finalStrTime1));
-                                    Collections.sort(fsdataliist, new Comparator<task_struc>() {
+                                    fsdatalist.add(new task_struc(getTask,getTime,getTag, finalStrTime1));
+                                    Collections.sort(fsdatalist, new Comparator<task_struc>() {
                                         @Override
                                         public int compare(task_struc t1, task_struc t2) {
                                             if(t1.hour==t2.hour) {
