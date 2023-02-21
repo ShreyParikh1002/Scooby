@@ -179,7 +179,7 @@ class Home extends Fragment
         fsadapter = new firestore_adapter(fsdataliist);
         fsrecycler.setAdapter(fsadapter);
 
-        db.collection("task").document(strDate).get().addOnCompleteListener(task->{
+        db.collection("task2").document(strDate).get().addOnCompleteListener(task->{
             if (task.isSuccessful())
             {
                 DocumentSnapshot document = task.getResult();
@@ -204,14 +204,14 @@ class Home extends Fragment
                             q = a.get(i).get("time");
                             r = a.get(i).get("tag");
                             s = a.get(i).get("hour");
-                            if (Integer.parseInt(s) <= intTime + 1)
-                            {
+//                            if (Integer.parseInt(s) <= intTime + 1)
+//                            {
                                 fsdataliist.add(new task_struc(p, q, r, s));
-                            }
-                            else
-                            {
-                                break;
-                            }
+//                            }
+//                            else
+//                            {
+//                                break;
+//                            }
                             //                                    HashMap<String,String>
                             //                                    a.get(i).get("tag");
                         }
@@ -226,6 +226,15 @@ class Home extends Fragment
                     //                                Log.i("TAG", users.get(0).get(users.get(0).keySet().toArray()[0]));
                 }
             }
+            Collections.sort(fsdataliist, new Comparator<task_struc>() {
+                @Override
+                public int compare(task_struc t1, task_struc t2) {
+                    if(t1.hour==t2.hour) {
+                        return 0;
+                    }
+                    return Integer.parseInt(t1.hour) < Integer.parseInt(t2.hour) ? -1 : 1;
+                }
+            });
             fsadapter.notifyDataSetChanged();
         });
 
@@ -315,7 +324,7 @@ class Home extends Fragment
                         strTime = Integer.toString(intTime );
                     }
 
-                    DocumentReference id = db.collection("task").document(strDate);
+                    DocumentReference id = db.collection("task2").document(strDate);
                     String finalStrTime = strTime;
                     String finalStrTime1 = strTime;
                     id.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -327,7 +336,7 @@ class Home extends Fragment
                                 if (document.exists())
                                 {
                                     Log.i("TAG", "Document exists!");
-                                    id.update(finalStrTime, FieldValue.arrayUnion(new task_struc(getTask,getTime,getTag, finalStrTime1)));
+                                    id.update("task", FieldValue.arrayUnion(new task_struc(getTask,getTime,getTag, finalStrTime1)));
                                     fsdataliist.add(new task_struc(getTask,getTime,getTag, finalStrTime1));
                                     Collections.sort(fsdataliist, new Comparator<task_struc>() {
                                         @Override
@@ -364,7 +373,7 @@ class Home extends Fragment
                                         initialise.put(initialStr, empty);
                                         id.set(initialise, SetOptions.merge());
                                     }
-                                    id.update(finalStrTime, FieldValue.arrayUnion(new task_struc(getTask,getTime,getTag, finalStrTime1)));
+                                    id.update("task", FieldValue.arrayUnion(new task_struc(getTask,getTime,getTag, finalStrTime1)));
                                     taskcur.setText("");
                                     timecur.setText("");
                                     tagcur.setSelection(0);

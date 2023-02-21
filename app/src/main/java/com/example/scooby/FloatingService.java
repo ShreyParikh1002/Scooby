@@ -318,7 +318,7 @@ public class FloatingService extends Service {
             }
             // TODO: 06-02-2023 integrate this update method as a replacement for adding
 //            db.collection("userid").document("date").collection("09-02-2023").document("tasks")
-            DocumentReference id= db.collection("task").document(strDate);
+            DocumentReference id= db.collection("task2").document(strDate);
             id.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -327,15 +327,16 @@ public class FloatingService extends Service {
                         if (document.exists()) {
                             Log.i("TAG", "Document exists!");
                             for (int i = 0; i < task_collection.size(); i++) {
-                                id.update(strTime, FieldValue.arrayUnion(task_collection.get(i)));
+                                id.update("task", FieldValue.arrayUnion(task_collection.get(i)));
                             }
                         } else {
                             Log.i("TAG", "Document does not exist!");
                             ArrayList<task_struc> empty=new ArrayList<>();
-                            empty.add(new task_struc("", "", "0",""));
+                            Map<String, ArrayList<task_struc>> initialise = new HashMap<>();
+
                             for(int i=8;i<=24;i++){
-                                empty.get(0).hour=Integer.toString(i);
-                                Map<String, ArrayList<task_struc>> initialise = new HashMap<>();
+                                empty.add(new task_struc("", "", "0",Integer.toString(i)));
+//                                empty.get(0).hour=Integer.toString(i);
                                 String initialStr;
                                 if(i<10){
                                     initialStr="0"+Integer.toString(i);
@@ -343,11 +344,13 @@ public class FloatingService extends Service {
                                 else{
                                     initialStr=Integer.toString(i);
                                 }
-                                initialise.put(initialStr,empty);
-                                id.set(initialise, SetOptions.merge());
                             }
+
+                            initialise.put("task",empty);
+                            id.set(initialise, SetOptions.merge());
+
                             for (int i = 0; i < task_collection.size(); i++) {
-                                id.update(strTime, FieldValue.arrayUnion(task_collection.get(i)));
+                                id.update("task", FieldValue.arrayUnion(task_collection.get(i)));
                             }
                         }
                     }
