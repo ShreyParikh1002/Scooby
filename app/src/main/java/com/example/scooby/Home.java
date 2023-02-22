@@ -176,10 +176,9 @@ class Home extends Fragment
 
         fsrecycler.setLayoutManager(new LinearLayoutManager(getContext()));
         //        fsdataliist=new ArrayList<>();
-        fsadapter = new firestore_adapter(fsdatalist);
-        fsrecycler.setAdapter(fsadapter);
 
-        db.collection("task2").document("21-02-2023").get().addOnCompleteListener(task->{
+
+        db.collection("task2").document(strDate).get().addOnCompleteListener(task->{
             if (task.isSuccessful())
             {
                 DocumentSnapshot document = task.getResult();
@@ -195,9 +194,20 @@ class Home extends Fragment
                             return Integer.parseInt(t1.hour) < Integer.parseInt(t2.hour) ? -1 : 1;
                         }
                     });
+//                    int n=fsdatalist.size();
+                    for(int i=fsdatalist.size()-1;i>=0;i--){
+                        if(Integer.parseInt(fsdatalist.get(i).getHour())>(intTime+1)){
+                            Log.i("TAG", fsdatalist.get(i).getHour()+" "+fsdatalist.get(i).getTask()+" "+fsdatalist.get(i).getTag());
+                            fsdatalist.remove(i);
+                        }
+                        else{
+                            break;
+                        }
+                    }
 //                    Log.i("TAG", fsdatalist+"");
 //                    Log.i("TAG", fsdatalist + "");
-                    fsadapter.notifyDataSetChanged();
+                    fsadapter = new firestore_adapter(fsdatalist);
+                    fsrecycler.setAdapter(fsadapter);
 //                    Log.i("tag", fsdatalist.get(0).getHour() );
 //                    users = new TreeMap<String, Object>(users);
 //                    //                            Collections.sort(users);
@@ -317,14 +327,14 @@ class Home extends Fragment
                 if (proceed == 1)
                 {
 
-                    if (intTime < 10)
-                    {
-                        strTime = "0" + Integer.toString(intTime );
-                    }
-                    else
-                    {
-                        strTime = Integer.toString(intTime );
-                    }
+//                    if (intTime < 10)
+//                    {
+//                        strTime = "0" + Integer.toString(intTime );
+//                    }
+//                    else
+//                    {
+//                        strTime = Integer.toString(intTime );
+//                    }
 
                     DocumentReference id = db.collection("task2").document(strDate);
                     String finalStrTime = strTime;
@@ -344,12 +354,24 @@ class Home extends Fragment
                                         @Override
                                         public int compare(task_struc t1, task_struc t2) {
                                             if(t1.hour==t2.hour) {
+//                                            Log.i("TAG", t1.hour+" "+t2.hour);
                                                 return 0;
                                             }
                                             return Integer.parseInt(t1.hour) < Integer.parseInt(t2.hour) ? -1 : 1;
                                         }
                                     });
-                                    fsadapter.notifyDataSetChanged();
+                                    for(int i=fsdatalist.size()-1;i>=0;i--){
+                                        if(Integer.parseInt(fsdatalist.get(i).getHour())>(intTime+1)){
+                                            Log.i("TAG", fsdatalist.get(i).getHour()+" "+fsdatalist.get(i).getTask()+" "+fsdatalist.get(i).getTag());
+                                            fsdatalist.remove(i);
+                                        }
+                                        else{
+                                            break;
+                                        }
+                                    }
+                                    fsadapter = new firestore_adapter(fsdatalist);
+                                    fsrecycler.setAdapter(fsadapter);
+//                                    fsadapter.notifyDataSetChanged();
                                     taskcur.setText("");
                                     timecur.setText("");
                                     tagcur.setSelection(0);
@@ -357,25 +379,48 @@ class Home extends Fragment
                                 else
                                 {
                                     Log.i("TAG", "Document does not exist!");
-                                    ArrayList<task_struc> empty = new ArrayList<>();
-                                    empty.add(new task_struc("", "", "0", ""));
-                                    for (int i = 8; i <= 24; i++)
-                                    {
-                                        empty.get(0).hour = Integer.toString(i);
-                                        Map<String, ArrayList<task_struc>> initialise = new HashMap<>();
-                                        String initialStr;
-                                        if (i < 10)
-                                        {
-                                            initialStr = "0" + Integer.toString(i);
-                                        }
-                                        else
-                                        {
-                                            initialStr = Integer.toString(i);
-                                        }
-                                        initialise.put(initialStr, empty);
-                                        id.set(initialise, SetOptions.merge());
+                                    ArrayList<task_struc> empty=new ArrayList<>();
+                                    Map<String, ArrayList<task_struc>> initialise = new HashMap<>();
+
+                                    for(int i=8;i<=24;i++){
+                                        empty.add(new task_struc("", "", "0",Integer.toString(i)));
+//                                empty.get(0).hour=Integer.toString(i);
+//                                        String initialStr;
+//                                        if(i<10){
+//                                            initialStr="0"+Integer.toString(i);
+//                                        }
+//                                        else{
+//                                            initialStr=Integer.toString(i);
+//                                        }
                                     }
+                                    fsdatalist.addAll(empty);
+                                    initialise.put("task",empty);
+                                    id.set(initialise, SetOptions.merge());
+
                                     id.update("task", FieldValue.arrayUnion(new task_struc(getTask,getTime,getTag, finalStrTime1)));
+                                    fsdatalist.add(new task_struc(getTask,getTime,getTag, finalStrTime1));
+                                    Collections.sort(fsdatalist, new Comparator<task_struc>() {
+                                        @Override
+                                        public int compare(task_struc t1, task_struc t2) {
+                                            Log.i("TAG", t1.hour);
+                                            if(t1.hour==t2.hour) {
+                                                return 0;
+                                            }
+                                            return Integer.parseInt(t1.getHour()) < Integer.parseInt(t2.getHour()) ? -1 : 1;
+                                        }
+                                    });
+                                    for(int i=fsdatalist.size()-1;i>=0;i--){
+                                        if(Integer.parseInt(fsdatalist.get(i).getHour())>(intTime+1)){
+                                            Log.i("TAG", fsdatalist.get(i).getHour()+" "+fsdatalist.get(i).getTask()+" "+fsdatalist.get(i).getTag());
+                                            fsdatalist.remove(i);
+                                        }
+                                        else{
+                                            break;
+                                        }
+                                    }
+                                    fsadapter = new firestore_adapter(fsdatalist);
+                                    fsrecycler.setAdapter(fsadapter);
+//                                    fsadapter.notifyDataSetChanged();
                                     taskcur.setText("");
                                     timecur.setText("");
                                     tagcur.setSelection(0);
