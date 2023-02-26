@@ -5,4 +5,5 @@ import java.util.Map;
 
 public class retrieve_POJO {
     public ArrayList<task_struc> task;
+    public Map<String, Integer> settings;
 }
