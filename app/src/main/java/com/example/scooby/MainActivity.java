@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        });
         chipNavigationBar = findViewById(R.id.nav);
-        chipNavigationBar.setItemSelected(R.id.nav,
+        chipNavigationBar.setItemSelected(R.id.bottom_nav_home,
                 true);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container,

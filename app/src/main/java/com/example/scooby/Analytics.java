@@ -8,6 +8,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.utils.ColorTemplate;
+
+import java.util.ArrayList;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link Analytics#newInstance} factory method to
@@ -23,6 +31,9 @@ public class Analytics extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    View v;
+    PieChart pie;
 
     public Analytics() {
         // Required empty public constructor
@@ -59,6 +70,16 @@ public class Analytics extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_analytics, container, false);
+        v=inflater.inflate(R.layout.fragment_analytics, container, false);
+        pie=v.findViewById(R.id.pie);
+        ArrayList<PieEntry> pieEntries=new ArrayList<>();
+        for(int i=1;i<10;i++){
+            PieEntry entry=new PieEntry(i,(float)i*10.0);
+            pieEntries.add(entry);
+        }
+        PieDataSet pieData=new PieDataSet(pieEntries,"Tasks");
+        pieData.setColors(ColorTemplate.COLORFUL_COLORS);
+        pie.setData(new PieData((pieData)));
+        return v;
     }
 }
