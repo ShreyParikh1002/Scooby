@@ -25,6 +25,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+//        code snippet for chip navigation, currently executed at the end of scheduling intent
+//        still preserved so as to test impact on app startup once app is completed
 //........................................................................
 //        chipNavigationBar = findViewById(R.id.nav);
 //        chipNavigationBar.setItemSelected(R.id.nav,
@@ -35,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
 //        bottomMenu();
 //........................................................................
 
+
+//        asking for overlay permissions
         ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             if (result.getResultCode() == RESULT_OK) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -50,13 +54,17 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
             activityResultLauncher.launch(intent);
         }
-//......................................
+
+//        scheduling after 10 seconds of launch
+//.................................................................................................
         AlarmManager alarmy=(AlarmManager) getSystemService(ALARM_SERVICE);
         long triggerTime=System.currentTimeMillis()+(10*1000);
 //        Toast.makeText(this, Long.toString(triggerTime), Toast.LENGTH_SHORT).show();
         Intent broadcast=new Intent(MainActivity.this,hourlyReceiver.class);
         PendingIntent pi=PendingIntent.getBroadcast(MainActivity.this,100,broadcast,PendingIntent.FLAG_MUTABLE);
         alarmy.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,triggerTime,pi);
+
+//        button for pop up service
 //.................................................................................................
 //        Button scoob=(Button) findViewById(R.id.scoob);
 //        scoob.setOnClickListener(view -> {
@@ -71,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
 //                }
 //            }
 //        });
+//.................................................................................................
         chipNavigationBar = findViewById(R.id.nav);
         chipNavigationBar.setItemSelected(R.id.bottom_nav_home,
                 true);

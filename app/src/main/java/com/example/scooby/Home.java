@@ -125,34 +125,6 @@ class Home extends Fragment
     private
     void setUpRecyclerView()
     {
-        //        Query query = taskRef;
-        //        firestorestruc f=new firestorestruc("a","b","c");
-        ////        taskRef.document("15-02-2023").set(f);
-        //        FirestoreRecyclerOptions<firestorestruc> options=new FirestoreRecyclerOptions.Builder<firestorestruc>()
-        //                .setQuery(query,firestorestruc.class)
-        //                .build();
-        //        Log.d("TAG", "DocumentSnapshot data: " + options);
-        //        fsadapter=new firestoreAdapter(options);
-        //        fsadapter.startListening();
-        //        fsrecycler.setAdapter(fsadapter);
-        //        taskRef.document("07-02-2023").get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-        //            @Override
-        //            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-        //                if (task.isSuccessful()) {
-        //                    DocumentSnapshot document = task.getResult();
-        //                    if (document.exists()) {
-        //                        Log.d("TAG", "DocumentSnapshot data: " + document.getData());
-        //                    } else {
-        //                        Log.d("TAG", "No such document");
-        //                    }
-        //                } else {
-        //                    Log.d("TAG", "get failed with ", task.getException());
-        //                }
-        //            }
-        //        });
-        //        db.collection("userid").document("date").collection("09-02-2023").document("tasks")
-        //                .set
-
         Date date = Calendar.getInstance().getTime();
         //        small mm is minutes
         DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
@@ -175,9 +147,6 @@ class Home extends Fragment
         }
 
         fsrecycler.setLayoutManager(new LinearLayoutManager(getContext()));
-        //        fsdataliist=new ArrayList<>();
-
-
         db.collection("task2").document(strDate).get().addOnCompleteListener(task->{
             if (task.isSuccessful())
             {
@@ -194,7 +163,6 @@ class Home extends Fragment
                             return Integer.parseInt(t1.hour) < Integer.parseInt(t2.hour) ? -1 : 1;
                         }
                     });
-//                    int n=fsdatalist.size();
                     for(int i=fsdatalist.size()-1;i>=0;i--){
                         if(Integer.parseInt(fsdatalist.get(i).getHour())>(intTime+1)){
                             Log.i("TAG", fsdatalist.get(i).getHour()+" "+fsdatalist.get(i).getTask()+" "+fsdatalist.get(i).getTag());
@@ -204,10 +172,12 @@ class Home extends Fragment
                             break;
                         }
                     }
-//                    Log.i("TAG", fsdatalist+"");
-//                    Log.i("TAG", fsdatalist + "");
                     fsadapter = new firestore_adapter(fsdatalist);
                     fsrecycler.setAdapter(fsadapter);
+
+//                    Original database design
+//                    New design currently in testing phase so kept as backup
+//***********************************************************************************************************************************************************
 //                    Log.i("tag", fsdatalist.get(0).getHour() );
 //                    users = new TreeMap<String, Object>(users);
 //                    //                            Collections.sort(users);
@@ -247,28 +217,12 @@ class Home extends Fragment
                     //                                );
                     //                            }
                     //                                Log.i("TAG", users.get(0).get(users.get(0).keySet().toArray()[0]));
+//***********************************************************************************************************************************************************
                 }
             }
         });
-
-        //        for (int i = 0; i < fsdataliist.size(); i++)
-
-        // Printing and display the elements in ArrayList
-        //        fsdataliist.add(new task_struc("a","b","c"));
-//        fsadapter.notifyDataSetChanged();
     }
 
-    //    @Override
-    //    public void onStart() {
-    //        super.onStart();
-    //        fsadapter.startListening();
-    //    }
-    //
-    //    @Override
-    //    public void onStop() {
-    //        super.onStop();
-    //        fsadapter.stopListening();
-    //    }
     public
     void current()
     {
@@ -297,9 +251,6 @@ class Home extends Fragment
         ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         tagcur.setAdapter(ad);
 
-
-
-
         submitcur.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view)
             {
@@ -326,16 +277,6 @@ class Home extends Fragment
 
                 if (proceed == 1)
                 {
-
-//                    if (intTime < 10)
-//                    {
-//                        strTime = "0" + Integer.toString(intTime );
-//                    }
-//                    else
-//                    {
-//                        strTime = Integer.toString(intTime );
-//                    }
-
                     DocumentReference id = db.collection("task2").document(strDate);
                     String finalStrTime = strTime;
                     String finalStrTime1 = strTime;
@@ -384,14 +325,6 @@ class Home extends Fragment
 
                                     for(int i=8;i<=24;i++){
                                         empty.add(new task_struc("", "", "0",Integer.toString(i)));
-//                                empty.get(0).hour=Integer.toString(i);
-//                                        String initialStr;
-//                                        if(i<10){
-//                                            initialStr="0"+Integer.toString(i);
-//                                        }
-//                                        else{
-//                                            initialStr=Integer.toString(i);
-//                                        }
                                     }
                                     fsdatalist.addAll(empty);
                                     initialise.put("task",empty);
@@ -432,12 +365,6 @@ class Home extends Fragment
                             }
                         }
                     });
-
-//                    DocumentReference updateRef = db.collection("task").document(strDate);
-//                    updateRef.update(strTime, FieldValue.arrayUnion(new task_struc(getTask,getTime,getTag,strTime)));
-//                    taskcur.setText("");
-//                    timecur.setText("");
-//                    tagcur.setSelection(0);
                 }
             }
         });

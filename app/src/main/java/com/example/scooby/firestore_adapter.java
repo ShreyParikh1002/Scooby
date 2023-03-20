@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -45,6 +46,8 @@ public class firestore_adapter extends RecyclerView.Adapter<firestore_adapter.fs
             holder.fstag.setText(fsdatalist.get(position).getTag());
             holder.fstask.setText(fsdatalist.get(position).getTask());
             holder.fshour.setBackgroundColor(Color.parseColor("#00000000"));
+            holder.fscard.setBackgroundColor(Color.parseColor("#00000000"));
+            holder.bglinear.setBackgroundResource(R.drawable.card_corners);
         }
     }
 
@@ -56,6 +59,7 @@ public class firestore_adapter extends RecyclerView.Adapter<firestore_adapter.fs
     class fsviewholder extends RecyclerView.ViewHolder{
         TextView fstime,fstag,fstask,fshour;
         CardView fscard;
+        LinearLayout bglinear;
         public fsviewholder(@NonNull View itemView) {
             super(itemView);
             fscard=itemView.findViewById(R.id.card);
@@ -63,6 +67,7 @@ public class firestore_adapter extends RecyclerView.Adapter<firestore_adapter.fs
             fstag=itemView.findViewById(R.id.firestoretag);
             fstask=itemView.findViewById(R.id.firestoretask);
             fshour=itemView.findViewById(R.id.firestorehour);
+            bglinear=itemView.findViewById(R.id.bglinear);
         }
     }
 }

@@ -66,21 +66,18 @@ public class FloatingService extends Service {
     int cnt=0;
     ArrayList<String> courses = new ArrayList<String>();
     Date date = Calendar.getInstance().getTime();
-    //        small mm is minutes
+    //        small mm is minutes, capital MM is months
     DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
     DateFormat timeFormat = new SimpleDateFormat("kk");
     String strDate = dateFormat.format(date);
     String strTime = timeFormat.format(date);
     int intTime=Integer.parseInt(strTime);
 
-//    ,"Morning", "DSA",
-//            "Friends", "Wasted","Food"
-//             };
 //    .................................................................................
     ArrayList<task_struc> task_collection=new ArrayList<>();
     RecyclerView recycle;
     task_recycler_adapter adapter;
-    MediaPlayer mp;
+    MediaPlayer mp; //base infrastructure for alarm ringtone still in place, current alarm mode vibration
 //    ..................................................................................
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -95,31 +92,25 @@ public class FloatingService extends Service {
     }
     @Override
 
-
-
-
-
-
-
-
     public void onCreate() {
         super.onCreate();
-
 //..................................................................................
 //        mp= MediaPlayer.create(this, Settings.System.DEFAULT_RINGTONE_URI);
 //        mp.setLooping(true);
 //        mp.start();
-
+//..................................................................................
         v=(Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-// Start without a delay
+        long[] pattern = {0, 1000, 1000,1000, 1000,1000, 1000,1000, 1000,1000, 1000,1000, 1000,1000, 1000,1000, 1000,1000, 1000,1000, 1000};
+// First 0 means tart without a delay
 // Vibrate for 1000 milliseconds
 // Sleep for 1000 milliseconds
-        long[] pattern = {0, 1000, 1000,1000, 1000,1000, 1000,1000, 1000,1000, 1000,1000, 1000,1000, 1000,1000, 1000,1000, 1000,1000, 1000};
 
-// The '0' here means to repeat indefinitely
+        v.vibrate(pattern, -1);
+
+// If '-1' was replaced by '0' here, means to repeat indefinitely
 // '0' is actually the index at which the pattern keeps repeating from (the start)
 // To repeat the pattern from any other point, you could increase the index, e.g. '1'
-        v.vibrate(pattern, -1);
+// But we don't want to repeat, we need it to stop once this pattern for 15 second is done, so we set repeat as '-1'
 //..................................................................................
         wm =(WindowManager ) getSystemService(WINDOW_SERVICE);
         int LAYOUT_FLAG;
@@ -130,6 +121,7 @@ public class FloatingService extends Service {
             LAYOUT_FLAG = WindowManager.LayoutParams.TYPE_PHONE;
         }
 //        providing a constant notification while service is running
+//        without this notification pop up is force closed by system os
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel("com.example.floatinglayout", "Floating Layout Service", NotificationManager.IMPORTANCE_LOW);
             channel.setLightColor(Color.BLUE);
@@ -154,13 +146,10 @@ public class FloatingService extends Service {
         close = viewRoot.findViewById(R.id.window_close);
         emergency = viewRoot.findViewById(R.id.emergency);
         submit = viewRoot.findViewById(R.id.submit);
-//        task1 =viewRoot.findViewById(R.id.task1);
-//        task2 =viewRoot.findViewById(R.id.task2);
-
         add=viewRoot.findViewById(R.id.add);
         recycle=viewRoot.findViewById(R.id.recycle);
         recycle.setLayoutManager(new LinearLayoutManager(this));
-
+//      populating the drop down
         courses.add("");
         courses.add("DSA");
         courses.add("Class");
@@ -177,59 +166,27 @@ public class FloatingService extends Service {
         courses.add("Friends/room");
         courses.add("Extra Sleep");
         courses.add("Exercise");
+//        displaying  blank recycler view card for taking input
         task_collection.add(new task_struc("","","0",""));
-
-
         adapter=new task_recycler_adapter(this, task_collection,courses);
         recycle.setAdapter(adapter);
+//        disabling the close button to compel user for input
         close.setEnabled(false);
         close.setOnClickListener(view -> stopService());
+//        initial plan to provide for 2 emergencies per day, it wil close the pop up no questions asked
         emergency.setOnClickListener(view -> emergency_stop());
         submit.setOnClickListener(view -> save());
         add.setOnClickListener(view->addcard());
 
         parameters.x=0;
         parameters.y=0;
+//        aplha is used to set transparency of pop up window
 //        parameters.alpha = 0.8f;
         parameters.gravity= Gravity.CENTER| Gravity.CENTER;
         wm.addView(viewRoot,parameters);
-
-//        spin1 = viewRoot.findViewById(R.id.spinner1);
-//        spin2 = viewRoot.findViewById(R.id.spinner2);
-//        spin3 = viewRoot.findViewById(R.id.spinner3);
-//        spin4 = viewRoot.findViewById(R.id.spinner4);
-
-//        task1 = viewRoot.findViewById(R.id.task1);
-//        task2 = viewRoot.findViewById(R.id.task2);
-//        time1 = viewRoot.findViewById(R.id.time1);
-//        spin.setOnItemSelectedListener(this);
-
-        // Create the instance of ArrayAdapter
-        // having the list of courses
-//        ArrayAdapter ad
-//                = new ArrayAdapter(
-//                this,
-//                android.R.layout.simple_spinner_item,
-//                courses);
-//
-//        // set simple layout resource file
-//        // for each item of spinner
-//        ad.setDropDownViewResource(
-//                android.R.layout
-//                        .simple_spinner_dropdown_item);
-//
-//         Set the ArrayAdapter (ad) data on the
-//         Spinner which binds data to spinner
-//        spin1.setAdapter(ad);
-//        spin2.setAdapter(ad);
-//        spin3.setAdapter(ad);
-//        spin4.setAdapter(ad);
-
-
     }
 
     private void addcard() {
-//        task_collection.clear();
 //        recycle.getLayoutManager().scrollToPosition();
         int proceed=1;
         for (int i = 0; i < recycle.getChildCount(); i++) {
@@ -253,10 +210,11 @@ public class FloatingService extends Service {
         if(proceed==1) {
             task_collection.add(new task_struc("", "", "0",""));
             adapter.notifyDataSetChanged();
-
+//            stopping the vibrations
             v.cancel();
         }
-        //        mp.stop();
+//        stopping the alarm ringtone
+//        mp.stop();
     }
 
     private void save() {
@@ -284,19 +242,6 @@ public class FloatingService extends Service {
 //            task_collection.add(new task_struc(holder.task.getText().toString(),holder.tag.getText().toString(),holder.time.getText().toString()));
         }
         if (proceed==1){
-//            Map<String, ArrayList<task_struc>> dates = new HashMap<>();
-    //        Map<String, Object> tasks    = new HashMap<>();
-    //        Map<String, Object> details    = new HashMap<>();
-
-    //        details.put("desc", task1.getText().toString());
-    //        details.put("duration", time1.getText().toString());
-    //        details.put("tag", spin1.getSelectedItem().toString());
-    //
-    //        tasks.put("Task:"+Integer.toString(cnt),details);
-
-
-
-
             if(intTime<=10){
                 strTime="0"+Integer.toString(intTime-1);
             }
@@ -359,7 +304,8 @@ public class FloatingService extends Service {
                     }
                 }
             });
-
+//            old database design
+//            *********************************************************************************************************
 //            DocumentReference updateRef=db.collection("task").document(strDate);
 //            for (int i = 0; i < task_collection.size(); i++) {
 //                updateRef.update(strTime, FieldValue.arrayUnion(task_collection.get(i)));
@@ -400,6 +346,7 @@ public class FloatingService extends Service {
 ////                                fsdataliist=(ArrayList<task_struc>) d;
 //                Log.i("tag",d+"");
 //            }
+//            *********************************************************************************************************
             v.cancel();
             stopService();}
     }
