@@ -40,6 +40,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
@@ -61,6 +63,7 @@ public class FloatingService extends Service {
     private LinearLayout ll;
     ImageView close;
     Button emergency,submit,add;
+    FirebaseUser user= FirebaseAuth.getInstance().getCurrentUser();
     View viewRoot;
     Vibrator v ;
     int cnt=0;
@@ -154,6 +157,7 @@ public class FloatingService extends Service {
         courses.add("DSA");
         courses.add("Class");
         courses.add("Development");
+        courses.add("Necessity");
         courses.add("Morning");
         courses.add("Wasted");
         courses.add("Binging");
@@ -263,7 +267,7 @@ public class FloatingService extends Service {
             }
             // TODO: 06-02-2023 integrate this update method as a replacement for adding
 //            db.collection("userid").document("date").collection("09-02-2023").document("tasks")
-            DocumentReference id= db.collection("task2").document(strDate);
+            DocumentReference id= db.collection(user.getUid()).document(strDate);
             id.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {

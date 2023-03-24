@@ -35,13 +35,13 @@ public class hourlyReceiver extends BroadcastReceiver {
 
 //      System.currentTimeMillis() return time of device in mili second since a reference known as the UNIX epoch: 1970-01-01 00:00:00 UTC
         long triggerTime=System.currentTimeMillis()+(5*60+30)*60*1000;
+//            India is 5 hr 30 mins ahead so subtracted it for IST conversion
+//            subtracting the remainder ((triggerTime)%(60*60*1000)) converts to to nearest hour
         if((triggerTime-((triggerTime)%(60*60*1000)))%(24*60*60*1000)==0){
             triggerTime=(triggerTime-((triggerTime)%(60*60*1000)))+(9*60*60*1000)-(5*60+30)*60*1000;
         }
-        else{
+        else if(!((triggerTime-((triggerTime)%(60*60*1000)))%(24*60*60*1000)<=8)){
             triggerTime=(triggerTime-((triggerTime)%(60*60*1000)))+(61*60*1000)-(5*60+30)*60*1000;
-//            India is 5 hr 30 mins ahead so subtracted it for IST conversion
-//            subtracting the remainder ((triggerTime)%(60*60*1000)) converts to to nearest hour
         }
         Intent broadcast=new Intent(context,hourlyReceiver.class);
         PendingIntent pi=PendingIntent.getBroadcast(context,100,broadcast,PendingIntent.FLAG_MUTABLE);

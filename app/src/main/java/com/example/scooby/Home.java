@@ -24,6 +24,8 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -57,6 +59,7 @@ class Home extends Fragment
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     private
     firestore_adapter fsadapter;
+    FirebaseUser user= FirebaseAuth.getInstance().getCurrentUser();
     ArrayList<task_struc> fsdatalist = new ArrayList<>();
     RecyclerView fsrecycler;
     View v;
@@ -147,7 +150,7 @@ class Home extends Fragment
         }
 
         fsrecycler.setLayoutManager(new LinearLayoutManager(getContext()));
-        db.collection("task2").document(strDate).get().addOnCompleteListener(task->{
+        db.collection(user.getUid()).document(strDate).get().addOnCompleteListener(task->{
             if (task.isSuccessful())
             {
                 DocumentSnapshot document = task.getResult();
@@ -235,6 +238,7 @@ class Home extends Fragment
         courses.add("DSA");
         courses.add("Class");
         courses.add("Development");
+        courses.add("Necessity");
         courses.add("Morning");
         courses.add("Wasted");
         courses.add("Binging");
@@ -277,7 +281,7 @@ class Home extends Fragment
 
                 if (proceed == 1)
                 {
-                    DocumentReference id = db.collection("task2").document(strDate);
+                    DocumentReference id = db.collection(user.getUid()).document(strDate);
                     String finalStrTime = strTime;
                     String finalStrTime1 = strTime;
                     id.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
