@@ -267,7 +267,7 @@ public class FloatingService extends Service {
             }
             // TODO: 06-02-2023 integrate this update method as a replacement for adding
 //            db.collection("userid").document("date").collection("09-02-2023").document("tasks")
-            DocumentReference id= db.collection(user.getUid()).document(strDate);
+            DocumentReference id= db.collection("users").document(user.getUid()).collection("data").document(strDate);
             id.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {

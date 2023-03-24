@@ -150,7 +150,7 @@ class Home extends Fragment
         }
 
         fsrecycler.setLayoutManager(new LinearLayoutManager(getContext()));
-        db.collection(user.getUid()).document(strDate).get().addOnCompleteListener(task->{
+        db.collection("users").document(user.getUid()).collection("data").document(strDate).get().addOnCompleteListener(task->{
             if (task.isSuccessful())
             {
                 DocumentSnapshot document = task.getResult();
@@ -281,7 +281,7 @@ class Home extends Fragment
 
                 if (proceed == 1)
                 {
-                    DocumentReference id = db.collection(user.getUid()).document(strDate);
+                    DocumentReference id = db.collection("users").document(user.getUid()).collection("data").document(strDate);
                     String finalStrTime = strTime;
                     String finalStrTime1 = strTime;
                     id.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
